@@ -1,3 +1,27 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  mount ActionCable.server, at: '/cable'
+
+  root 'dashboard#index'
+
+  namespace :api do
+    namespace :v1 do
+      resources :syncs
+    end
+  end
+
+  resources :discounts
+  resources :clients
+
+  get '/login', to: 'sessions#new'
+  post '/login', to: 'sessions#create'
+  delete '/logout', to: 'sessions#destroy'
+  post '/switch', to: 'sessions#switch'
+
+  resources :deliveries
+  resources :cargos
+
+  get 'daily_report', to: 'payments#daily_report'
+  get 'cargo_transaction', to: 'payments#cargo_transaction_report'
+  get 'cargo_collect', to: 'payments#cargo_collect_report'
+
 end
