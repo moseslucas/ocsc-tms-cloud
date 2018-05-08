@@ -1,0 +1,66 @@
+- provide :title, "Create Client"
+
+.page-content-inner
+  .row
+    .col-xs-12
+      .portlet.light.portlet-fit.portlet-form
+        .portlet-body
+          = form_for @client, html: {class: "form-horizontal"} do |f|
+            .form-body
+
+              .form-group{ class:  if @client.errors.key?("name") then "has-error" end }
+                = f.label :name, "Name", class: "control-label col-md-3"
+                .col-md-4
+                  = f.text_field :name, class: "form-control"
+                - if @client.errors.key? "name"
+                  %label.control-label= @client.errors["name"].shift.strip
+
+              .form-group{ class:  if @client.errors.key?("address") then "has-error" end }
+                = f.label :address, "Address", class: "control-label col-md-3"
+                .col-md-4
+                  = f.text_field :address, class: "form-control"
+                - if @client.errors.key? "address"
+                  %label.control-label= @client.errors["address"].shift.strip
+
+              .form-group{ class:  if @client.errors.key?("contact") then "has-error" end }
+                = f.label :contact, "Contact", class: "control-label col-md-3"
+                .col-md-4
+                  = f.text_field :contact, class: "form-control"
+                - if @client.errors.key? "contact"
+                  %label.control-label= @client.errors["contact"].shift.strip
+
+              .form-group{ class:  if @client.errors.key?("email") then "has-error" end }
+                = f.label :email, "Email", class: "control-label col-md-3"
+                .col-md-4
+                  = f.text_field :email, class: "form-control"
+                - if @client.errors.key? "email"
+                  %label.control-label= @client.errors["email"].shift.strip
+
+              .form-group{ class:  if @client.errors.key?("credit_limit") then "has-error" end }
+                = f.label :credit_limit, "Credit Limit", class: "control-label col-md-3"
+                .col-md-4
+                  = f.number_field :credit_limit, class: "form-control"
+                - if @client.errors.key? "credit_limit"
+                  %label.control-label= @client.errors["credit_limit"].shift.strip
+
+              .form-group{ class:  if @client.errors.key?("discount_id") then "has-error" end }
+                = f.label :discount_id, "Type", class: "control-label col-md-3"
+                .col-md-4
+                  -# = f.select :discount_id, options_for_select(["percent"]), {}, class: "form-control"
+                  = f.collection_select :discount_id, Discount.active, :id, :name, {include_blank: "Select Discount"}, {class: "form-control"}
+                - if @client.errors.key? "discount_id"
+                  %label.control-label= @client.errors["discount_id"].shift.strip
+
+              .form-group{ class:  if @client.errors.key?("description") then "has-error" end }
+                = f.label :description, "Remarks", class: "control-label col-md-3"
+                .col-md-4
+                  = f.text_area :description, class: "form-control"
+                - if @client.errors.key? "description"
+                  %label.control-label= @client.errors["description"].shift.strip
+
+
+            .form-actions
+              .row
+                .col-md-offset-3.col-md-9
+                  =  f.submit "Create", class: "btn green"
+                  =  link_to "Back", clients_path, class: "btn"

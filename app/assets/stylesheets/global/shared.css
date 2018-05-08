@@ -1,0 +1,9 @@
+img.no-records-found {
+  height: 150px;
+  width: 150px;
+}
+
+img.nofile {
+  max-width: 150px;
+  max-height: 150px;
+}

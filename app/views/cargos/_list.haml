@@ -1,0 +1,28 @@
+- unless smart_listing.empty?
+  %table.table.table-striped.table-hover.dt-responsive
+    %thead
+      %tr
+        %th= smart_listing.sortable "CWB", :ref_id
+        %th Client
+        %th= smart_listing.sortable "Date", :trans_date
+        %th Destination
+        %th= smart_listing.sortable "Payment", :status1
+        %th= smart_listing.sortable "Status", :status2
+        %th= smart_listing.sortable "Custom Tag", :custom_tag
+        %th= smart_listing.sortable "Total", :total_amount
+    %tbody
+      - smart_listing.collection.each do |t|
+        %tr
+          %td= t.ref_id
+          %td= t.client.name
+          %td= t.trans_date
+          %td= t.destination.name
+          %th= status1_meaning t.status1
+          %th= status2_meaning t.status2
+          %td= t.custom_tag
+          %td= t.total_amount
+  = smart_listing.paginate
+  = smart_listing.pagination_per_page_links
+- else
+  %h1.text-center No Records Found
+  %h1.text-center= image_tag "search2.gif", class: "no-records-found"

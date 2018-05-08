@@ -1,0 +1,44 @@
+- provide :title, "Create Discount"
+
+.page-content-inner
+  .row
+    .col-xs-12
+      .portlet.light.portlet-fit.portlet-form
+        .portlet-body
+          = form_for @discount, html: {class: "form-horizontal"} do |f|
+            .form-body
+
+              .form-group{ class:  if @discount.errors.key?("name") then "has-error" end }
+                = f.label :name, "Name", class: "control-label col-md-3"
+                .col-md-4
+                  = f.text_field :name, class: "form-control"
+                - if @discount.errors.key? "name"
+                  %label.control-label= @discount.errors["name"].shift.strip
+
+              .form-group{ class:  if @discount.errors.key?("description") then "has-error" end }
+                = f.label :description, "Description", class: "control-label col-md-3"
+                .col-md-4
+                  = f.text_field :description, class: "form-control"
+                - if @discount.errors.key? "description"
+                  %label.control-label= @discount.errors["description"].shift.strip
+
+              .form-group{ class:  if @discount.errors.key?("amount") then "has-error" end }
+                = f.label :amount, "Amount", class: "control-label col-md-3"
+                .col-md-4
+                  = f.number_field :amount, class: "form-control"
+                - if @discount.errors.key? "amount"
+                  %label.control-label= @discount.errors["amount"].shift.strip
+
+              .form-group{ class:  if @discount.errors.key?("discount_type") then "has-error" end }
+                = f.label :discount_type, "Type", class: "control-label col-md-3"
+                .col-md-4
+                  = f.select :discount_type, options_for_select(["percent"]), {}, class: "form-control"
+                - if @discount.errors.key? "discount_type"
+                  %label.control-label= @discount.errors["discount_type"].shift.strip
+
+
+            .form-actions
+              .row
+                .col-md-offset-3.col-md-9
+                  =  f.submit "Create", class: "btn green"
+                  =  link_to "Back", discounts_path, class: "btn"

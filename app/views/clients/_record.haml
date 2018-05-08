@@ -1,0 +1,9 @@
+%td= o.name
+%td= o.contact
+%td= o.email
+%td= o.credit_limit
+%td= o.discount.name if o.discount
+%td
+  .btn-group.btn-group-xs.btn-group-solid
+    = link_to "Edit/View", edit_client_path(o), class: "btn btn-xs green"
+    = link_to "Delete", client_path(o), method: :delete, data: {confirm: 'Are you sure?'}, class: "btn btn-xs red"

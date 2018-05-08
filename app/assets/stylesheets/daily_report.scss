@@ -1,0 +1,95 @@
+.dr-sheet
+{
+	font-family: "calibri";
+}
+
+h3.dr
+{
+	margin: 5px;
+	font-weight: 100;
+	font-size: 14px;
+	text-align: center;
+
+}
+
+.dr-footertable td > h4
+{
+    margin-bottom: 0;
+	font-weight: 600;
+	font-size: 14px;
+}
+
+.dr-title
+{
+	text-align: center;
+	font-weight: 600;
+}
+
+.dr-subtitle
+{
+	margin: 5px;
+	font-weight: 100;
+	font-size: 14px;
+	text-align: center;
+
+}
+.dr-headertable
+{
+	width: 100%;
+}
+
+.dr-headertable td
+{
+	width: 33%;
+	text-align: left;
+}
+.dr-headertable td > h4
+{
+	margin-bottom: 0;
+	font-weight: 600;
+	font-size: 14px;
+}
+
+.dr-datatable
+{
+	width: 100%;
+	margin-top: 10px;
+
+}
+
+.dr-datatable td
+{
+	border-style: solid;
+	border-width: 1px;
+	padding: 3px;
+}
+.dr-datatable h4
+{
+	margin: 0;
+	font-weight: 100;
+	font-size: 14px;
+	text-align: center;
+}
+
+.dr-tablebody td
+{
+		max-width: 200px;
+}
+
+.dr-footertable
+{
+	width: 100%;
+	margin-top:50px;
+}
+.dr-footertable h4
+{
+	margin: 0;
+	font-weight: 100;
+	font-size: 14px;
+	text-align: center;
+}
+
+.dr-footertable td
+{
+	width: 30%;
+}

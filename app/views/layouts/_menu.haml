@@ -1,0 +1,4 @@
+- menu_list = ["master","mirasol", "pasay", "san andres"]
+- menu_list.each do |menu| 
+  %li.menu-dropdown.classisc-menu-dropdown{class: session[:branch] === menu ? "active" : ""}
+    = link_to menu.titleize, switch_path(branch: menu), method: "POST"

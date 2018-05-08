@@ -1,0 +1,20 @@
+- provide :title, "Discounts"
+
+- unless notice.nil?
+  .alert.alert-success
+    #notice= notice
+
+
+.page-content-inner
+  .row
+    .col-xs-12
+      .portlet.light.portlet-fit
+        .portlet-title
+          = link_to "CREATE NEW", new_discount_path, class: "btn green"
+        .portlet-body
+          = smart_listing_controls_for(:discounts, {class: "form-inline text-right"}) do
+            .checkbox
+            .form-group.filter.input-append
+              = text_field_tag :filter, '', class: "search form-control", 
+                                        placeholder: "Search...", autocomplete: :off
+          = smart_listing_render :discounts

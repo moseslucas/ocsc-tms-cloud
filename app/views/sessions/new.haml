@@ -1,0 +1,88 @@
+%body
+  .logo
+    %a{:href => "index.html"}
+      = image_tag("newocsclogo.png",draggable:false, :style=>"width:80px;height:80px")
+  / END LOGO
+  / BEGIN LOGIN
+  = succeed "<" do
+    .content
+      / BEGIN LOGIN FORM
+      %form#form_sessions.login-form
+        %h3.form-title.font-green Log In
+        .alert.alert-danger.display-hide
+          %button.close{"data-close" => "alert"}
+          %span Enter any username and password.
+        #div_f_name.form-group
+          / ie8, ie9 does not support html5 placeholder, so we just show field title for that
+          %label.control-label.visible-ie8.visible-ie9 Username
+          %input#f_name.form-control.form-control-solid.placeholder-no-fix{:autocomplete => "off", :name => "f_name", :placeholder => "Username", :required => "true", :type => "text"}/
+        #div_f_password.form-group
+          %label.control-label.visible-ie8.visible-ie9 Password
+          %input#f_password.form-control.form-control-solid.placeholder-no-fix{:autocomplete => "off", :name => "f_password", :placeholder => "Password", :required => "true", :type => "password"}/
+        .form-actions
+          %button#btn_login.btn.green.uppercase.btn-block{:type => "submit"} Login
+      / END LOGIN FORM
+  / /content
+  .copyright 2018 © Ocean Coast Shipping Corp
+
+:javascript
+  var sessions = {
+    save : function(){
+      if(this.validate_form()==false){
+          const dataString = ($('#form_sessions').serialize()); //serialize form to dataString
+
+          $.ajax ({
+            type: "POST",
+            url: "/login",
+            dataType: 'json',
+            data: dataString,
+            cache: false,
+            success: function(s){
+              if(s.status == 'success'){
+                window.location.href = '/';
+              }
+              else if(s.status == 'error'){
+                alert('Invalid Credentials')
+                misc.btn_disabled('btn_login',false); //set button to abled
+              }
+            }  //success
+          });
+
+      }// end if
+      return false;
+    },
+
+    validate_form : function(){
+      var validity = false;
+      if($('#f_name').val()==''){
+        $('#div_f_name').addClass('has-error');
+        validity = true;
+      }
+      else{
+        $('#div_f_name').removeClass('has-error');
+        validity = false;
+      }
+      if($('#f_password').val()==''){
+        $('#div_f_password').addClass('has-error');
+        validity = true;
+      }
+      else{
+        $('#div_f_password').removeClass('has-error');
+        validity = false;
+      }
+      return validity
+    },
+
+    clear_form : function(){
+      $('#btn_login').val('new')
+      misc.btn_disabled('btn_login',false); //set back button to abled
+      $('#div_f_name').removeClass('has-error');
+      $('#div_f_password').removeClass('has-error');
+      $('#f_name').val('');
+      $('#f_password').val('');
+    },
+  };
+
+  $(document).ready(function(){
+    $('#form_sessions').submit(function(){  return sessions.save(); });
+  })

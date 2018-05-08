@@ -1,0 +1,52 @@
+- provide :title, "Daily Report"
+
+.page-content-inner
+  .row
+    .col-sm-3
+    .col-sm-6
+      .form-group
+        #div_f_date.input-group.input-group-lg
+          %input#f_date.form-control{:type => "date", :value => "#{DateTime.now.strftime '%Y-%m-%d'}"}/
+          %span.input-group-btn
+            %button#generate_cargo_collect.btn.purple-intense{:required => ""} Cargo Collect
+            %button#generate_cargo_transaction.btn.green-sharp{:required => ""} Cargo Transaction
+
+:javascript
+  var daily_report = {
+    settings : {
+      form : $(`#form_daily_payments`),
+      cargo_collect : $(`#generate_cargo_collect`),
+      cargo_transaction : $(`#generate_cargo_transaction`),
+      date : $(`#f_date`).val(),
+      doc_id: ``
+    },
+    validate_form : function(){
+      let validity = false;
+      if($(`#f_date`).val()==''){
+        $(`#div_f_date`).addClass(`has-error`)
+        validity = true;
+      }else{$(`#div_f_date`).removeClass(`has-error`)}
+      return validity
+    },
+
+    generate(type){
+      const f_date = $(`#f_date`).val()
+      if(!this.validate_form()){
+        if(type === 'cargoCollect'){
+          window.open(`/cargo_collect?date=${f_date}`,'_blank')
+        } else {
+          window.open(`/cargo_transaction?date=${f_date}`,'_blank')
+        }
+      }
+    },
+    at_dom : function() {
+      this.settings.cargo_collect.click(()=>{ this.generate('cargoCollect') })
+      this.settings.cargo_transaction.click(()=>{ this.generate('cargoTransaction') })
+    }
+
+  }
+
+  $(document).ready(function(){
+    self = daily_report
+    self.at_dom()
+  })

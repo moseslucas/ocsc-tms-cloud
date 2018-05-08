@@ -1,0 +1,120 @@
+- provide :title, "Bill of Ladding"
+- if @doc
+  %input#id{:type => "hidden", :value => "#{@doc['id']}"}/
+  - if @doc.status1==0
+    .no-print.alert.alert-danger{:id => "status_deleted "}
+      %strong Cancelled Record
+      This record has been already cancelled
+  .row
+    .col-xs-4
+      %h3 Details:
+      %ul.list-unstyled
+        %li
+          %strong Trip Code :
+          = @doc.ref_id
+        %li
+          %strong Date :
+          = @doc.trans_date
+        %li
+          %strong Description :
+          = @doc.description
+        / For Status1
+        - case @doc.status1
+        - when 1
+          %li.status1{:value => "#{@doc.status1}"} Consigned --- Partial Payments
+        - when 2
+          %li.status1{:value => "#{@doc.status1}"}
+            Fully Paid
+            %i.text-success.fa.fa-check-circle.fa-lg
+        - when 0
+          %li.status1{:value => "#{@doc.status1}"}
+            Cancelled
+            %i.text-danger.fa.fa-times-circle.fa-lg
+        - case @doc.status2
+        - when 1
+          %li.status2{:value => "#{@doc.status2}"} For Delivery
+        - when 2
+          %li.status2{:value => "#{@doc.status2}"} In Transit
+        - when 3
+          %li.status2{:value => "#{@doc.status2}"}
+            Released
+            %i.text-success.fa.fa-check-circle.fa-lg
+    .col-xs-4
+      %p
+        %strong Source:
+        %span.muted
+          = @doc.source.name
+      %p
+        %strong Destination:
+        %span.muted
+          = @doc.destination.name
+  %hr/
+  .row
+    .col-xs-12
+      %table.table.table-striped.table-hover
+        %thead
+          %tr
+            %th #
+            %th CWB
+            %th Shipper
+            %th Consignee
+            / <th> Tags </th>
+            %th QTY
+            %th Description
+            %th Destination
+            %th Amount
+        %tbody
+          - i=1
+          - sub_total=0
+          - @doc.document_details.each do |c|
+            %tr
+              %td
+                = i
+              %td
+                = c.document_shipping.ref_id
+              %td
+                = c.document_shipping.shipper
+              %td
+                = c.document_shipping.client.name
+              / <td> <haml_silent></haml_silent> </td>
+              %td
+                = c.document_shipping.document_details.sum(:qty)
+              %td
+                = c.document_shipping.document_details.first.description
+              %td
+                = c.document_shipping.destination.name
+              %td
+                = number_with_delimiter sprintf '%.2f', c.document_shipping.total_amount, delimiter:','
+            - i+=1
+  -# .row
+  -#   .col-xs-8.invoice-block
+  -#     .btn-group
+  -#       %button.btn.btn-lg.blue.hidden-print.dropdown-toggle{"data-toggle" => "dropdown"}
+  -#         Print Manifest
+  -#         %i.fa.fa-angle-down
+  -#       %ul.dropdown-menu.bottom-up
+  -#         %li#btn_print_manifest
+  -#           %a{:href => "javascript:;"}
+  -#             %i.fa.fa-print
+  -#             Original Copy
+  -#         %li#btn_print_manifest_driver
+  -#           %a{:href => "javascript:;"}
+  -#             %i.fa.fa-print
+  -#             Driver's Copy
+- else
+  .row
+    .center
+      %h1.text-center.text-muted No Matching Record
+    .col-md-2
+    .col-md-2.col-sm-2.col-xs-0
+      = image_tag("nofile.png", :class=>"nofile", draggable:false)
+    .col-md-6.col-sm-10.col-xs-12
+      %p.lead
+        We can not find the page you're looking for.
+        The record ID :
+        %strong.text-warning= params[:id]
+        = succeed "cannot" do
+          %br/
+        %br/
+        Please check the Record ID if correct and try again
+

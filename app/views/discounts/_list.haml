@@ -1,0 +1,18 @@
+- unless smart_listing.empty?
+  %table.table.table-striped
+    %thead
+      %th= smart_listing.sortable "Name", :name
+      %th= smart_listing.sortable "Description", :description
+      %th= smart_listing.sortable "Amount", :amount
+      %th= smart_listing.sortable "Discount Type", :discount_type
+      %th
+    %tbody
+      - smart_listing.collection.each do |o|
+        %tr
+          = smart_listing.render object: o, partial: "discounts/record", locals: {o: o}
+  -# Render nice pagination links fitted for Bootstrap 3 by default
+  = smart_listing.paginate
+  = smart_listing.pagination_per_page_links
+- else
+  %h1.text-center No Records Found
+  %h1.text-center= image_tag "search2.gif", class: "no-records-found"

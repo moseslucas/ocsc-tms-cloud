@@ -1,0 +1,67 @@
+- provide :title, "Cargo Collect Report"
+/ Each sheet element should have the class "sheet"
+/ "padding-**mm" is optional: you can set 10, 15, 20 or 25
+
+%section.dr-sheet.dr-padding-10mm
+  / Write HTML just like a web page
+  %article.dr-title Ocean Coast Shipping Corporation
+  %h3.dr-subtitle San Roque, San Andress, Catanduanes - Telephone: ( 052 ) 811-3079, Telefax: 726-6031
+  %h3.dr 151 Aurora Blvd, cor, G. Reyes, Brgy. Salapan, San Juan City - Telephone ( 02 ) 722-6449, Telefax: 726-6031
+  %table.dr-headertable
+    %tr
+      %td
+      %td
+        %h4{:style => "text-align: center;"} Cargo Collect Details
+      %td
+    %tr
+      %td{:colspan => "3"}
+        %h4
+          Transaction Date: #{DateTime.parse(@date).strftime("%B %d, %Y")}
+  %table.dr-datatable
+    %tr
+      %td
+        %h4 Cargo Waybill#
+      %td
+        %h4 Consignee
+      %td
+        %h4 Shipper
+      %td
+        %h4 Amount
+    / Start Writing Data. Loop Here
+    - total=0
+    - @report.each do |c|
+      %tr.tablebody
+        %td
+          %h4= "#{@prefix}#{remove_cwb_waybill_batch_prefix(c.ref_id)}"
+        %td
+          %h4= c.client.name
+        %td
+          %h4= c.shipper
+        %td
+          %h4.pull-right= number_with_delimiter sprintf '%.2f', c.total_amount, delimiter:','
+      - total+= c.total_amount
+    / Enter total Values
+    %tr.dr-tablebody
+      %td{:colspan => "3", :style => "padding: 10px"}
+        %h4{:style => "font-weight: 600"} Total
+      %td
+        %h4.pull-right{:style => "font-weight: 600"}
+          = number_with_delimiter sprintf '%.2f', total, delimiter:','
+  %table.dr-footertable
+    %h3.dr{:style => "margin-bottom: 0; text-align: center;"} =========================================================================================
+    %h3.dr{:style => "margin: 0;"} End of Report
+    %h3.dr{:style => "margin: 0; text-align: center;"} =========================================================================================
+    / Footer For Signaure
+    %tr
+      %td
+        %h4{:style => "text-align: left; margin-bottom: 30px"} Prepared by:
+      %td
+      %td
+    %tr
+      %td{:style => "border-top:solid 1px;"}
+        %h4{:style => "text-align: center; margin-top: 0px; font-weight: 100"} (signature over printed name)
+      %td
+      %td
+
+:javascript
+  window.print()

@@ -1,0 +1,20 @@
+- provide :title, "Dashboard"
+
+- if session[:branch] === "master"
+  .row
+    .col-md-3
+      =link_to "Clients", clients_path
+    .col-md-3
+      =link_to "Discounts", discounts_path
+    .col-md-3
+      =link_to "Collections"
+    .col-md-3
+      =link_to "State of Accounts"
+- else
+  .row
+    .col-md-4
+      =link_to "Daily Transactions", daily_report_path
+    .col-md-4
+      =link_to "Cargo Transactions", cargos_path
+    .col-md-4
+      =link_to "Deliveries", deliveries_path

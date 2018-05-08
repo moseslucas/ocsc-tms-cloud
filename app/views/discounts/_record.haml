@@ -1,0 +1,8 @@
+%td= o.name
+%td= o.description
+%td #{number_with_precision o.amount, precision: 0} %
+%td= o.discount_type
+%td
+  .btn-group.btn-group-xs.btn-group-solid
+    = link_to "Edit/View", edit_discount_path(o), class: "btn btn-xs green"
+    = link_to "Delete", discount_path(o), method: :delete, data: {confirm: 'Are you sure?'}, class: "btn btn-xs red"

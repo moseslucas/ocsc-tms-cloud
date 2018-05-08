@@ -1,0 +1,29 @@
+- unless smart_listing.empty?
+  %table.table.table-striped.table-hover.dt-responsive
+    %thead
+      %tr
+        %th= smart_listing.sortable "ID", :id
+        %th= smart_listing.sortable "Trip Code", :ref_id
+        %th= smart_listing.sortable "Date", :trans_date
+        %th= smart_listing.sortable "Status", :status2
+        %th Vehicle
+        %th Source
+        %th Destination
+        %th
+    %tbody
+      - smart_listing.collection.each do |t|
+        %tr
+          %td= t.id
+          %td= t.ref_id
+          %td= t.trans_date
+          %td= status_meaning(t.status2)
+          %td= "#{t.vehicles.first.ref_id} - #{t.vehicles.first.vehicle_type}"
+          %td= t.source.name
+          %td= t.destination.name
+          %td
+            = button_to "View", delivery_path(t), method: "get", class: "btn dark btn-outline"
+  = smart_listing.paginate
+  = smart_listing.pagination_per_page_links
+- else
+  %h1.text-center No Records Found
+  %h1.text-center= image_tag "search2.gif", class: "no-records-found"

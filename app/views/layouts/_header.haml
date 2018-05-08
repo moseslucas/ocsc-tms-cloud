@@ -1,0 +1,26 @@
+.page-wrapper
+  .page-wrapper-row
+    .page-wrapper-top
+      .page-header
+        .page-header-top
+          .container
+            .page-logo
+              = image_tag "logo-default-ocsc.png"
+            .top-menu
+              =link_to "Logout", logout_path, method: 'DELETE', data: {confirm: "Are you sure you want to log-out?"}
+        .page-header-menu
+          .container
+            .hor-menu
+              %ul.nav.navbar-nav
+                =render "layouts/menu"
+  .page-wrapper-row.full-height
+    .page-wrapper-middle
+      .page-container
+        .page-content-wrapper
+          .page-head
+            .container
+              .page-title
+                %h1= yield :title
+          .page-content
+            .container
+              = yield
