@@ -12,7 +12,7 @@ gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'hamlit-rails'
-gem 'rack-cors'
+gem 'rack-cors', :require => 'rack/cors'
 gem "smart_listing"
 gem 'jquery-rails'
 gem 'redis', '~> 3.0'
