@@ -28,12 +28,6 @@ module OcscTmsCloud
     # the framework and any gems in your application.
 
     # Don't generate system test files.
-    config.middleware.insert_before 0, Rack::Cors do
-      allow do
-        origins 'localhost:1234'
-        resource '*', :headers => :any, :methods => [:get, :post, :options]
-      end
-    end
     config.generators.system_tests = nil
   end
 end
