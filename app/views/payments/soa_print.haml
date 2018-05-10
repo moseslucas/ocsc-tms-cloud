@@ -1,0 +1,123 @@
+- provide :title, "Statement of Account"
+%section.soa-sheet.soa-padding-10mm
+  / Write HTML just like a web page
+  %article.soa-title Ocean Coast Shipping Corporation
+  %h3.soa-subtitle San Roque, San Andress, Catanduanes - Telephone: ( 052 ) 811-3079, Telefax: 726-6031
+  %h3.soa 96 Mirasol Street, Brgy. San Roque, Murphy, Quezon City – Telephone (02) 437-0210
+  %table.soa-headertable
+    %tr
+      %td
+      %td
+        %h4.text-center STATEMENT OF ACCOUNT
+      %td
+        %h4.text-right
+          S.O.A.
+          %text.soa_id
+  %table.soa-datatable
+    %tr
+      %td Customer's Name
+      %td{:colspan => "3"}
+        %strong
+          %text#client_name= @client[:name]
+    / Date Printed row
+    %tr
+      %td Date Printed
+      %td{:colspan => "3"}
+        %strong
+          %text#date_printed= DateTime.now.strftime '%B %d, %Y'
+    / Detail Columns
+    %tr
+      %td.soa-col1-width.text-center
+        %strong Trans. Date
+      %td.soa-col2-width.text-center
+        %strong CWB No.
+      %td.soa-col3-width.text-center.long-column
+        %strong Shipper's Name
+      %td.soa-col4-width.text-center
+        %strong Amount
+    / Detail VALUES
+    -# - total_cargo_this_month = 0
+    -# - @cargo_this_month.each do |c|
+    -#   %tr
+    -#     %td.text-center= c[:trans_date].strftime '%B %d, %Y'
+    -#     %td.text-center
+    -#       = c[:ref_id]
+    -#     %td.text-center.long-column
+    -#       = c[:shipper]
+    -#     %td
+    -#       %text{:style => "margin-left:5px"}
+    -#         = number_with_delimiter sprintf '%.2f', c[:total_amount], delimiter:','
+    -#   - total_cargo_this_month += c[:total_amount]
+    / Detail Value End
+    / Detail2 Cells
+    %tr
+      %td.soa-remarks.text-center{:colspan => "2", :rowspan => "3"}
+        %strong
+          Accounts are payable on presentation.
+          All payments shall be made in cash or check payable to
+          = succeed "JOSALIE" do
+            %br/
+      %td.long-column
+        %strong Cargo Acounts/s this Month
+        %br/
+        %text Add: Account/s For Payment
+        -# - @cargo_per_month.each do |c|
+        -#   %br/
+        -#   %text.details-cargo-account= c[:date]
+          / <text class="details-cargo-account">#{soa_id}</text>
+      %td.long-column
+        -# %strong{:style => "margin-left:5px"}= number_with_delimiter sprintf '%.2f', total_cargo_this_month, delimiter:','
+        %br/
+        -# - total_cargo_per_month = 0
+        -# - @cargo_per_month.each do |c|
+        -#   %br/
+        -#   %text{:style => "margin-left:5px;"}= number_with_delimiter sprintf '%.2f', c[:amount], delimiter:','
+          / <text class="details-cargo-account">#{soa_id}</text>
+          - total_cargo_per_month+= c[:amount]
+    %tr
+      %td.long-column
+        %strong Total
+        %br/
+        %text Less: Payment/s
+        -# - @payment_per_month.each do |c|
+        -#   %br/
+        -#   %text.details-cargo-account= c[:date]
+          / <text class="details-cargo-account">#{soa_id}</text>
+      %td.long-column
+        -# %strong{:style => "margin-left:5px"}= number_with_delimiter sprintf '%.2f', total_cargo_per_month, delimiter:','
+        %br/
+        -# - total_payment_per_month = 0
+        -# - @payment_per_month.each do |c|
+        -#   %br/
+        -#   %text{:style => "margin-left:5px;"}= number_with_delimiter sprintf '%.2f', c[:amount], delimiter:','
+          / <text class="details-cargo-account">#{soa_id}</text>
+          - total_payment_per_month+= c[:amount]
+    %tr
+      %td.text-center.long-column
+        %strong Amount Due
+      %td
+        -# %strong{:style => "margin-left:5px"}= number_with_delimiter sprintf '%.2f', total_payment_per_month, delimiter:','
+    / Signature row
+    %tr
+      %td.text-center{:colspan => "4"}
+        .row
+          .col-xs-4.text-center
+            %strong Received by:
+            .soa-box-signature
+            Print Name &amp; Signature
+          .col-xs-4
+            %strong Prepared by:
+            .soa-box-signature
+            Print Name &amp; Signature
+          .col-xs-4
+            %strong Noted by:
+            .soa-box-signature
+            Josalie Elaine P. Cua
+            %br/
+            Chief Operations &amp; Finance
+  / end note
+  .text-center.soa-end-note
+    %text
+      %strong
+        NOTE: PLEASE DISREGARD THIS TATEMENT IF PAYMENT HAS BEEN MADE
+

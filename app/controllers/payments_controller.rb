@@ -14,32 +14,32 @@ class PaymentsController < ApplicationController
 		month = params[:f_month]
 		year = params[:f_year]
 		client_id = params[:f_client]
-    @client = Client.find_by(id: client_id)
+    @client = Client.find_by id: client_id
 
-    client_cargo = @client.documents.cargo.in_year(year).not_cancelled
-
-    query = "MONTH(trans_date) = #{month} AND YEAR(trans_date) = #{year}"
-    @cargo_this_month = client_cargo.where(query).not_cancelled
-
-    query = "MONTH(documents.trans_date) = ? AND YEAR(documents.trans_date) = ?"
-    cargo_per_month = client_cargo.not_cancelled
-    month_year = cargo_per_month.map { |m| [m.trans_date.month, m.trans_date.year] }.uniq
-    @cargo_per_month = month_year.map do |my| 
-      {
-        date: "#{Date::MONTHNAMES[my[0]]} #{my[1]}",
-        amount: cargo_per_month.where(query, my[0], my[1]).sum(:total_amount)
-      }
-    end
-
-    query = "MONTH(payments.trans_date) = ? AND YEAR(payments.trans_date) = ?"
-    payment_per_month = client_cargo.where.not(documents: {status1: 0}, payments: {status: 0}).includes(:payments)
-    month_year = payment_per_month.map { |m| [m.trans_date.month, m.trans_date.year] }.uniq
-    @payment_per_month = month_year.map do |my| 
-      {
-        date: "#{Date::MONTHNAMES[my[0]]} #{my[1]}",
-        amount: payment_per_month.where(query, my[0], my[1]).sum(:amount)
-      }
-    end
+    # client_cargo = @client.documents.cargo.in_year(year).not_cancelled
+    #
+    # query = "MONTH(trans_date) = #{month} AND YEAR(trans_date) = #{year}"
+    # @cargo_this_month = client_cargo.where(query).not_cancelled
+    #
+    # query = "MONTH(documents.trans_date) = ? AND YEAR(documents.trans_date) = ?"
+    # cargo_per_month = client_cargo.not_cancelled
+    # month_year = cargo_per_month.map { |m| [m.trans_date.month, m.trans_date.year] }.uniq
+    # @cargo_per_month = month_year.map do |my| 
+    #   {
+    #     date: "#{Date::MONTHNAMES[my[0]]} #{my[1]}",
+    #     amount: cargo_per_month.where(query, my[0], my[1]).sum(:total_amount)
+    #   }
+    # end
+    #
+    # query = "MONTH(payments.trans_date) = ? AND YEAR(payments.trans_date) = ?"
+    # payment_per_month = client_cargo.where.not(documents: {status1: 0}, payments: {status: 0}).includes(:payments)
+    # month_year = payment_per_month.map { |m| [m.trans_date.month, m.trans_date.year] }.uniq
+    # @payment_per_month = month_year.map do |my| 
+    #   {
+    #     date: "#{Date::MONTHNAMES[my[0]]} #{my[1]}",
+    #     amount: payment_per_month.where(query, my[0], my[1]).sum(:amount)
+    #   }
+    # end
   end
 
   def cargo_collect_report
