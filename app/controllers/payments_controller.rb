@@ -31,8 +31,6 @@ class PaymentsController < ApplicationController
       cargo_per_month = client_cargo
       .where("extract(month from documents.trans_date) = #{my[0]}")
       .where("extract(year from documents.trans_date) = #{my[1]}")
-      .where(payments: {payment_type: nil})
-      .or(client_cargo.where(payments: {payment_type: "collect"}))
       .where.not(status1: 2)
 
       amount = cargo_per_month.sum(:total_amount)
@@ -44,6 +42,10 @@ class PaymentsController < ApplicationController
         paid: paid
       }
     end
+
+    @payments = @client.payments
+    .includes(:document)
+    .where.not(documents: {status1: 2})
     #
     # query = "MONTH(payments.trans_date) = ? AND YEAR(payments.trans_date) = ?"
     # payment_per_month = client_cargo.where.not(documents: {status1: 0}, payments: {status: 0}).includes(:payments)

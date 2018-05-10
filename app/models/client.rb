@@ -19,5 +19,8 @@ class Client < ApplicationRecord
   }
 
   has_many :documents
+  has_many :payments, through: :documents
   belongs_to :discount, optional:true
+
+
 end
