@@ -1,5 +1,6 @@
 class Client < ApplicationRecord
   validates :name, presence: true
+  scope :premium, -> { where(branch: ["master"]) }
   scope :search, -> (filter) { 
     where(
       "(name ILIKE ?) OR

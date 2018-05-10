@@ -22,3 +22,4 @@
 // require layout/quick-sidebar.min
 // require layout/demo.min
 //= require smart_listing
+//= require select2

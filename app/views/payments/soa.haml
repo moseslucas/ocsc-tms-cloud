@@ -1,0 +1,81 @@
+- provide :title, "Statement of Accounts"
+
+.page-content-inner
+  .row
+    .col-sm-1
+    .col-sm-2
+      %label Select Month
+      #div_f_month.input-group-lg
+        = select_month(Date.today,options={},html_options={class:'form-control', id:'f_month'})
+    .col-sm-2
+      %label Select Year
+      #div_f_year.input-group-lg
+        = select_year(Date.today,options={},html_options={class:'form-control', id:'f_year'})
+    .col-sm-6
+      %label Select Client
+      #div_f_client.input-group.input-group-lg
+        %select#f_client.form-control
+          %option{value: ''} Search Client
+          - @clients.order(:name).each do |client|
+            %option{value: client.id}= client.name
+        %span.input-group-btn
+          %button#btn_generate.btn.green{:required => "", :type => "submit"} Generate SOA
+
+:javascript
+
+  var soa = {
+    settings : {
+      form : '',
+      btn_generate : $('#btn_generate'),
+      doc_id: '',
+    },
+
+    validate_form : function(){
+      let validity = false;
+      if($('#f_month').val()==''){
+        $('#div_f_month').addClass('has-error')
+        validity = true;
+      }else{$('#div_f_month').removeClass('has-error')}
+
+      if($('#f_year').val()==''){
+        $('#div_f_year').addClass('has-error')
+        validity = true;
+      }else{$('#div_f_year').removeClass('has-error')}
+
+      if($('#f_client').val()==''){
+        $('#div_f_client').addClass('has-error')
+        validity = true;
+      }else{$('#div_f_client').removeClass('has-error')}
+
+      return validity
+    },
+
+    generate: function(){
+      const f_month = $('#f_month').val()
+      const f_year = $('#f_year').val()
+      const f_client = $('#f_client').val()
+      switch (this.validate_form()) {
+        case false:
+          window.open(`/soa_print?f_month=${f_month}&f_year=${f_year}&f_client=${f_client}`,'_blank')
+        break
+      }//end switch case
+    },
+
+    at_load : function(){
+    },
+    at_init : function() {
+      $('#f_client').select2({ theme: 'bootstrap' })
+    },
+    at_dom : function() {
+      this.settings.btn_generate.click(()=>{ this.generate() })
+    }
+
+  }
+
+  $(document).ready(function(){
+    ito = soa
+    ito.at_load()
+    ito.at_init()
+    ito.at_dom()
+  })
+
