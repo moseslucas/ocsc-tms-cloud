@@ -17,24 +17,33 @@ class PaymentsController < ApplicationController
     @client = Client.find_by id: client_id
 
     client_cargo = @client.documents.includes(:payments).cargo.not_cancelled
-    .where("extract(year from documents.trans_date) = #{year}")
-    .where("extract(month from documents.trans_date) = #{month}")
-    #
-    # query = "MONTH(trans_date) = #{month} AND YEAR(trans_date) = #{year}"
+
     @cargo_this_month = client_cargo
     .where(payments: {payment_type: nil})
     .or(client_cargo.where(payments: {payment_type: "collect"}))
     .where.not(status1: 2)
+    .where("extract(year from documents.trans_date) = #{year}")
+    .where("extract(month from documents.trans_date) = #{month}")
     #
     # query = "MONTH(documents.trans_date) = ? AND YEAR(documents.trans_date) = ?"
-    # cargo_per_month = client_cargo.not_cancelled
-    # month_year = cargo_per_month.map { |m| [m.trans_date.month, m.trans_date.year] }.uniq
-    # @cargo_per_month = month_year.map do |my| 
-    #   {
-    #     date: "#{Date::MONTHNAMES[my[0]]} #{my[1]}",
-    #     amount: cargo_per_month.where(query, my[0], my[1]).sum(:total_amount)
-    #   }
-    # end
+    month_year = client_cargo.map { |m| [m.trans_date.month, m.trans_date.year] }.uniq
+    @cargo_per_month = month_year.map do |my| 
+      cargo_per_month = client_cargo
+      .where("extract(month from documents.trans_date) = #{my[0]}")
+      .where("extract(year from documents.trans_date) = #{my[1]}")
+      .where(payments: {payment_type: nil})
+      .or(client_cargo.where(payments: {payment_type: "collect"}))
+      .where.not(status1: 2)
+
+      amount = cargo_per_month.sum(:total_amount)
+      paid = cargo_per_month.sum(:amount)
+
+      {
+        date: "#{Date::MONTHNAMES[my[0]]} #{my[1]}",
+        amount: amount,
+        paid: paid
+      }
+    end
     #
     # query = "MONTH(payments.trans_date) = ? AND YEAR(payments.trans_date) = ?"
     # payment_per_month = client_cargo.where.not(documents: {status1: 0}, payments: {status: 0}).includes(:payments)

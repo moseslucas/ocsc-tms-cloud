@@ -61,17 +61,17 @@
         %strong Cargo Acounts/s this Month
         %br/
         %text Add: Account/s For Payment
-        -# - @cargo_per_month.each do |c|
-        -#   %br/
-        -#   %text.details-cargo-account= c[:date]
+        - @cargo_per_month.each do |c|
+          %br/
+          %text.details-cargo-account= c[:date]
           / <text class="details-cargo-account">#{soa_id}</text>
       %td.long-column
-        -# %strong{:style => "margin-left:5px"}= number_with_delimiter sprintf '%.2f', total_cargo_this_month, delimiter:','
+        %strong{:style => "margin-left:5px"}= number_with_delimiter sprintf '%.2f', total_cargo_this_month, delimiter:','
         %br/
-        -# - total_cargo_per_month = 0
-        -# - @cargo_per_month.each do |c|
-        -#   %br/
-        -#   %text{:style => "margin-left:5px;"}= number_with_delimiter sprintf '%.2f', c[:amount], delimiter:','
+        - total_cargo_per_month = 0
+        - @cargo_per_month.each do |c|
+          %br/
+          %text{:style => "margin-left:5px;"}= number_with_delimiter sprintf '%.2f', c[:paid] , delimiter:','
           / <text class="details-cargo-account">#{soa_id}</text>
           - total_cargo_per_month+= c[:amount]
     %tr
@@ -79,24 +79,24 @@
         %strong Total
         %br/
         %text Less: Payment/s
-        -# - @payment_per_month.each do |c|
-        -#   %br/
-        -#   %text.details-cargo-account= c[:date]
+        - @cargo_per_month.each do |c|
+          %br/
+          %text.details-cargo-account= c[:date]
           / <text class="details-cargo-account">#{soa_id}</text>
       %td.long-column
-        -# %strong{:style => "margin-left:5px"}= number_with_delimiter sprintf '%.2f', total_cargo_per_month, delimiter:','
+        %strong{:style => "margin-left:5px"}= number_with_delimiter sprintf '%.2f', total_cargo_per_month, delimiter:','
         %br/
-        -# - total_payment_per_month = 0
-        -# - @payment_per_month.each do |c|
-        -#   %br/
-        -#   %text{:style => "margin-left:5px;"}= number_with_delimiter sprintf '%.2f', c[:amount], delimiter:','
+        - total_payment_per_month = 0
+        - @cargo_per_month.each do |c|
+          %br/
+          %text{:style => "margin-left:5px;"}= number_with_delimiter sprintf '%.2f', c[:paid], delimiter:','
           / <text class="details-cargo-account">#{soa_id}</text>
           - total_payment_per_month+= c[:amount]
     %tr
       %td.text-center.long-column
         %strong Amount Due
       %td
-        -# %strong{:style => "margin-left:5px"}= number_with_delimiter sprintf '%.2f', total_payment_per_month, delimiter:','
+        %strong{:style => "margin-left:5px"}= number_with_delimiter sprintf '%.2f', total_payment_per_month, delimiter:','
     / Signature row
     %tr
       %td.text-center{:colspan => "4"}
