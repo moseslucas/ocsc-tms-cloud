@@ -1,5 +1,6 @@
 class Client < ApplicationRecord
   validates :name, presence: true
+  scope :premium, -> { where(branch: ["master"]) }
   scope :search, -> (filter) { 
     where(
       "(name ILIKE ?) OR
@@ -18,5 +19,8 @@ class Client < ApplicationRecord
   }
 
   has_many :documents
+  has_many :payments, through: :documents
   belongs_to :discount, optional:true
+
+
 end

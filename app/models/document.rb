@@ -30,7 +30,6 @@ class Document < ApplicationRecord
   scope :cargo, -> { where(doc_type: "rec") }
   scope :delivery, -> { where(doc_type: "del") }
   # scope :active, -> { where.not(status1: 0) }
-  scope :in_year, -> (year) { where("YEAR(documents.trans_date) = #{year}") }
 
   scope :cargo_search, -> (filter) { 
     where(
