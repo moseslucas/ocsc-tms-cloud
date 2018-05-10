@@ -16,10 +16,15 @@ class PaymentsController < ApplicationController
 		client_id = params[:f_client]
     @client = Client.find_by id: client_id
 
-    # client_cargo = @client.documents.cargo.in_year(year).not_cancelled
+    client_cargo = @client.documents.includes(:payments).cargo.not_cancelled
+    .where("extract(year from documents.trans_date) = #{year}")
+    .where("extract(month from documents.trans_date) = #{month}")
     #
     # query = "MONTH(trans_date) = #{month} AND YEAR(trans_date) = #{year}"
-    # @cargo_this_month = client_cargo.where(query).not_cancelled
+    @cargo_this_month = client_cargo
+    .where(payments: {payment_type: nil})
+    .or(client_cargo.where(payments: {payment_type: "collect"}))
+    .where.not(status1: 2)
     #
     # query = "MONTH(documents.trans_date) = ? AND YEAR(documents.trans_date) = ?"
     # cargo_per_month = client_cargo.not_cancelled
