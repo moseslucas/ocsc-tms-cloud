@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_01_080254) do
+ActiveRecord::Schema.define(version: 2018_05_10_163842) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,7 +31,6 @@ ActiveRecord::Schema.define(version: 2018_05_01_080254) do
     t.string "id_from_branch", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["name"], name: "index_calculations", unique: true
   end
 
   create_table "clients", id: :string, limit: 100, force: :cascade do |t|
@@ -179,7 +178,6 @@ ActiveRecord::Schema.define(version: 2018_05_01_080254) do
     t.string "id_from_branch", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["name"], name: "index_locations_on_name", unique: true
   end
 
   create_table "payments", id: :string, limit: 100, force: :cascade do |t|
@@ -207,7 +205,6 @@ ActiveRecord::Schema.define(version: 2018_05_01_080254) do
     t.string "id_from_branch", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["measurement"], name: "index_uoms_on_measurement", unique: true
   end
 
   create_table "users", id: :string, limit: 30, force: :cascade do |t|
@@ -217,7 +214,6 @@ ActiveRecord::Schema.define(version: 2018_05_01_080254) do
     t.string "status", limit: 1, default: "1"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["name"], name: "index_users_on_name", unique: true
   end
 
   create_table "vehicles", id: :string, limit: 100, force: :cascade do |t|

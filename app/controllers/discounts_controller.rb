@@ -27,7 +27,7 @@ class DiscountsController < ApplicationController
 
   def new
     # testing
-    ActionCable.server.broadcast "web_notifications_channel", {status: "OK"}
+    # ActionCable.server.broadcast "web_notifications_channel", {status: "OK"}
     @discount = Discount.new
   end
 
