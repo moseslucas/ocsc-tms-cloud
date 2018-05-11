@@ -21,9 +21,9 @@ class PaymentsController < ApplicationController
     @cargo_this_month = client_cargo
     .where(payments: {payment_type: nil})
     .or(client_cargo.where(payments: {payment_type: "collect"}))
-    .where.not(status1: 2)
     .where("extract(year from documents.trans_date) = #{year}")
     .where("extract(month from documents.trans_date) = #{month}")
+    .where.not(status1: 2)
     #
     # query = "MONTH(documents.trans_date) = ? AND YEAR(documents.trans_date) = ?"
     month_year = client_cargo.map { |m| [m.trans_date.month, m.trans_date.year] }.uniq
@@ -31,10 +31,14 @@ class PaymentsController < ApplicationController
       cargo_per_month = client_cargo
       .where("extract(month from documents.trans_date) = #{my[0]}")
       .where("extract(year from documents.trans_date) = #{my[1]}")
-      .where.not(status1: 2)
 
-      amount = cargo_per_month.sum(:total_amount)
-      paid = cargo_per_month.sum(:amount)
+      subtract = client_cargo
+      .where("extract(month from documents.trans_date) = #{my[0]}")
+      .where("extract(year from documents.trans_date) = #{my[1]}")
+      .where(payments: {payment_type: "cash"})
+
+      amount = cargo_per_month.sum(:total_amount) - subtract.sum(:total_amount)
+      paid = cargo_per_month.sum(:amount) - subtract.sum(:amount)
 
       {
         date: "#{Date::MONTHNAMES[my[0]]} #{my[1]}",
