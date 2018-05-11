@@ -41,7 +41,7 @@
       %tr
         %td.text-center= c[:trans_date].strftime '%B %d, %Y'
         %td.text-center
-          = c[:ref_id]
+          = "#{c[:branch][0][0..2].upcase}-#{c[:ref_id]}"
         %td.text-center.long-column
           = c[:shipper]
         %td
