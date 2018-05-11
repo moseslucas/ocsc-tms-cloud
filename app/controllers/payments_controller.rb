@@ -28,28 +28,24 @@ class PaymentsController < ApplicationController
     # query = "MONTH(documents.trans_date) = ? AND YEAR(documents.trans_date) = ?"
     month_year = client_cargo.map { |m| [m.trans_date.month, m.trans_date.year] }.uniq
     @cargo_per_month = month_year.map do |my| 
-      cargo_per_month = client_cargo
+      cargo = @client.documents.cargo.not_cancelled
+      cargo_per_month = cargo
       .where("extract(month from documents.trans_date) = #{my[0]}")
       .where("extract(year from documents.trans_date) = #{my[1]}")
+      .where.not(documents: {status1: 2})
 
-      subtract = client_cargo
-      .where("extract(month from documents.trans_date) = #{my[0]}")
-      .where("extract(year from documents.trans_date) = #{my[1]}")
-      .where(documents: {status1: 2})
-
-      amount = cargo_per_month.sum(:total_amount) - (subtract.sum(:total_amount))
-      paid = cargo_per_month.sum(:amount) - subtract.sum(:amount)
+      amount = cargo_per_month.sum(:total_amount) 
 
       {
         date: "#{Date::MONTHNAMES[my[0]]} #{my[1]}",
-        amount: amount,
-        paid: paid
+        amount: amount
       }
     end
 
     @payments = @client.payments
     .includes(:document)
     .where.not(documents: {status1: 2})
+    .where.not(payments: {status: 0})
     #
     # query = "MONTH(payments.trans_date) = ? AND YEAR(payments.trans_date) = ?"
     # payment_per_month = client_cargo.where.not(documents: {status1: 0}, payments: {status: 0}).includes(:payments)
