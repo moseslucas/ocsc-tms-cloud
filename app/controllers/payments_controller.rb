@@ -35,9 +35,9 @@ class PaymentsController < ApplicationController
       subtract = client_cargo
       .where("extract(month from documents.trans_date) = #{my[0]}")
       .where("extract(year from documents.trans_date) = #{my[1]}")
-      .where(payments: {payment_type: "cash"})
+      .where(documents: {status1: 2})
 
-      amount = cargo_per_month.sum(:total_amount) - subtract.sum(:total_amount)
+      amount = cargo_per_month.sum(:total_amount) - (subtract.sum(:total_amount))
       paid = cargo_per_month.sum(:amount) - subtract.sum(:amount)
 
       {
