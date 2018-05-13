@@ -1,20 +1,65 @@
 - provide :title, "Dashboard"
 
 - if session[:branch] === "master"
-  .row
-    .col-md-3
-      =link_to "Clients", clients_path
-    .col-md-3
-      =link_to "Discounts", discounts_path
-    .col-md-3
-      =link_to "Collections", collections_path
-    .col-md-3
-      =link_to "Statement of Accounts", soa_path
+  .col-md-3.col-sm-4.col-xs-12
+    %a.dashboard-stat.dashboard-stat-v2.blue{:href => "/clients"}
+      .visual
+        %i.fa.fa-users
+      .details
+        .number
+          %span Clients
+        .desc
+          Manage
+  .col-md-3.col-sm-4.col-xs-12
+    %a.dashboard-stat.dashboard-stat-v2.blue{:href => "/discounts"}
+      .visual
+        %i.fa.fa-download
+      .details
+        .number
+          %span Discounts
+        .desc
+          Manage
+  .col-md-3.col-sm-4.col-xs-12
+    %a.dashboard-stat.dashboard-stat-v2.green-meadow{:href => "/collections"}
+      .visual
+        %i.fa.fa-money
+      .details
+        .number
+          %span{"data-counter" => "counterup", "data-value" => "1349"} Collections
+        .desc
+          Report
+  .col-md-3.col-sm-4.col-xs-12
+    %a.dashboard-stat.dashboard-stat-v2.yellow-casablanca{:href => "/soa"}
+      .visual
+        %i.fa.fa-file-text-o
+      .details
+        .number
+          %span{"data-counter" => "counterup", "data-value" => "1349"} SOA
+        .desc
+          Statement of Accounts
 - else
   .row
-    .col-md-4
-      =link_to "Daily Transactions", daily_report_path
-    .col-md-4
-      =link_to "Cargo Transactions", cargos_path
-    .col-md-4
-      =link_to "Deliveries", deliveries_path
+    .col-sm-4.col-xs-12
+      %a.dashboard-stat.dashboard-stat-v2.red-haze{:href => "/daily_report"}
+        .visual
+          %i.fa.fa-files-o
+        .details
+          .number
+            %span Daily Report
+          .desc= session[:branch].titleize
+    .col-sm-4.col-xs-12
+      %a.dashboard-stat.dashboard-stat-v2.green-jungle{:href => "/cargos"}
+        .visual
+          %i.fa.fa-sitemap
+        .details
+          .number
+            %span Cargos
+          .desc= session[:branch].titleize
+    .col-sm-4.col-xs-12
+      %a.dashboard-stat.dashboard-stat-v2.purple-medium{:href => "/deliveries"}
+        .visual
+          %i.fa.fa-truck
+        .details
+          .number
+            %span{"data-counter" => "counterup", "data-value" => "1349"} Collections
+          .desc= session[:branch].titleize
