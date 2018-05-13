@@ -12,8 +12,9 @@ class PaymentsController < ApplicationController
 
   def create
     @payment = Payment.new @params
-    @payment.id = generate_id("MSTR-PAT",Payment)
+    @payment.id = generate_id("MSTR-PAY",Payment)
 		if @payment.save 
+      @doc = Document.includes(:payments).find(params[:id])
 			redirect_to "/payments/#{@payment.document_id}"
 		else
       redirect_to action: "add", id: @payment.document_id
@@ -30,6 +31,13 @@ class PaymentsController < ApplicationController
     @doc = Document.includes(:payments).find(params[:id])
     @payments = @doc.payments.where(payments: {status: 1})
     @paid = @doc.payments.where(payments: {status: 1}).sum(:amount)
+  end
+
+  def destroy
+    @payment = Payment.find(params[:id])
+    document_id = @payment.document_id
+    @payment.delete
+    redirect_to "/payments/#{document_id}"
   end
 
   def collection

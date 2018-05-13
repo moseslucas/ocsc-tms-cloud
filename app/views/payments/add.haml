@@ -26,7 +26,7 @@
               .form-group{ class:  if @payment.errors.key?("amount") then "has-error" end }
                 = f.label :amount, "Amount", class: "control-label col-md-3"
                 .col-md-4
-                  = f.number_field :amount, class: "form-control", value: (@doc.total_amount - @paid)
+                  = f.text_field :amount, class: "form-control", value: (@doc.total_amount - @paid)
                 - if @payment.errors.key? "name"
                   %label.control-label= @payment.errors["amount"].shift.strip
 
@@ -69,4 +69,4 @@
               .row
                 .col-md-offset-3.col-md-9
                   =  f.submit "ADD PAYMENT", class: "btn green"
-                  =  link_to "Back", clients_path, class: "btn"
+                  =  link_to "Back", "/payments/#{@doc.id}", class: "btn"
