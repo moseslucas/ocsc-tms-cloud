@@ -14,7 +14,14 @@ class PaymentsController < ApplicationController
     @payment = Payment.new @params
     @payment.id = generate_id("MSTR-PAY",Payment)
 		if @payment.save 
-      @doc = Document.includes(:payments).find(params[:id])
+      document = Document.find(@params[:document_id])
+      total_amount = document.total_amount
+      paid = document.payments.where(payments: {status: 1}).sum(:amount)
+      if (total_amount - paid === 0)
+        document.update_attribute(:status1, 2) 
+      else
+        document.update_attribute(:status1, 1) 
+      end
 			redirect_to "/payments/#{@payment.document_id}"
 		else
       redirect_to action: "add", id: @payment.document_id
@@ -36,7 +43,15 @@ class PaymentsController < ApplicationController
   def destroy
     @payment = Payment.find(params[:id])
     document_id = @payment.document_id
-    @payment.delete
+    @payment.update_attribute :status, 0
+    document = Document.find(document_id)
+    total_amount = document.total_amount
+    paid = document.payments.where(payments: {status: 1}).sum(:amount)
+    if (total_amount - paid === 0)
+      document.update_attribute(:status1, 2) 
+    else
+      document.update_attribute(:status1, 1) 
+    end
     redirect_to "/payments/#{document_id}"
   end
 
