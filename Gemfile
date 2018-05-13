@@ -18,6 +18,7 @@ gem 'jquery-rails'
 gem 'redis', '~> 3.0'
 gem 'bcrypt', '~> 3.1.7'
 gem "select2-rails"
+gem "font-awesome-rails"
 
 group :development do
   gem 'capistrano',         require: false

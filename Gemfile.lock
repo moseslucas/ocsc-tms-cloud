@@ -86,6 +86,8 @@ GEM
     faker (1.8.7)
       i18n (>= 0.7)
     ffi (1.9.23)
+    font-awesome-rails (4.7.0.4)
+      railties (>= 3.2, < 6.0)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
     hamlit (2.8.8)
@@ -245,6 +247,7 @@ DEPENDENCIES
   capistrano-rbenv-install
   capistrano3-puma
   faker
+  font-awesome-rails
   hamlit-rails
   jbuilder (~> 2.5)
   jquery-rails
