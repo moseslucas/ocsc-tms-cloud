@@ -17,7 +17,7 @@
           %td= t.ref_id
           %td= t.trans_date
           %td= status_meaning(t.status2)
-          %td= "#{t.vehicles.first.ref_id} - #{t.vehicles.first.vehicle_type}"
+          %td= "#{t.vehicles.first.ref_id} - #{t.vehicles.first.vehicle_type}" if t.vehicles.first
           %td= t.source.name
           %td= t.destination.name
           %td

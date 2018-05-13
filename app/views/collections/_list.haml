@@ -8,8 +8,8 @@
       %th= smart_listing.sortable "Desitnation", :destination_id
       %th Status
       %th= smart_listing.sortable "Total", :total_amount
-      %th Paid
-      %th Balance
+      -# %th Paid
+      -# %th Balance
       %th
     %tbody
       - smart_listing.collection.each do |o|

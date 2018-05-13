@@ -4,7 +4,7 @@ class CollectionsController < ApplicationController
   helper SmartListing::Helper
 
   def index
-    collection_scope = Document.joins(:payments, :client, :destination)
+    collection_scope = Document.left_joins(:payments, :client, :destination, :calculation)
     .cargo.not_cancelled
     .where(payments: {payment_type: "collect"})
     collection_scope = collection_scope.where(status1: params[:closed_payments] === "2" ? 2 : 1)
