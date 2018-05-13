@@ -1,0 +1,72 @@
+- provide :title, "Add Payment to #{@doc.branch[0][0..2].upcase}-#{@doc.ref_id}"
+
+.alert.alert-info
+  %strong AMOUNT
+  field is required
+
+.page-content-inner
+  .row
+    .col-xs-12
+      .portlet.light.portlet-fit.portlet-form
+        .portlet-title.row
+          .col-sm-4
+            %h4.green= "Total: #{@doc.total_amount}"
+          .col-sm-4
+            %h4= "Paid: #{@paid}"
+          .col-sm-4
+            %h4= "Balance: #{@doc.total_amount - @paid}"
+        .portlet-body
+          = form_for @payment, html: {class: "form-horizontal"} do |f|
+            .form-body
+
+              .form-group{ class:  if @payment.errors.key?("document_id") then "has-error" end }
+                .col-md-4
+                  = f.hidden_field :document_id, class: "form-control", value: @doc.id, hidden: true
+
+              .form-group{ class:  if @payment.errors.key?("amount") then "has-error" end }
+                = f.label :amount, "Amount", class: "control-label col-md-3"
+                .col-md-4
+                  = f.text_field :amount, class: "form-control", value: (@doc.total_amount - @paid)
+                - if @payment.errors.key? "name"
+                  %label.control-label= @payment.errors["amount"].shift.strip
+
+              .form-group{ class:  if @payment.errors.key?("trans_date") then "has-error" end }
+                = f.label :trans_date, "Payment Date", class: "control-label col-md-3"
+                .col-md-4
+                  = f.date_field :trans_date, class: "form-control", value: Date.today
+                - if @payment.errors.key? "trans_date"
+                  %label.control-label= @payment.errors["trans_date"].shift.strip
+
+              .form-group{ class:  if @payment.errors.key?("deposit_date") then "has-error" end }
+                = f.label :deposit_date, "Deposit Date", class: "control-label col-md-3"
+                .col-md-4
+                  = f.date_field :deposit_date, class: "form-control", value: Date.today
+                - if @payment.errors.key? "deposit_date"
+                  %label.control-label= @payment.errors["deposit_date"].shift.strip
+
+              .form-group{ class:  if @payment.errors.key?("name") then "has-error" end }
+                = f.label :ref_id, "AR/OR", class: "control-label col-md-3"
+                .col-md-4
+                  = f.text_field :ref_id, class: "form-control"
+                - if @payment.errors.key? "name"
+                  %label.control-label= @payment.errors["ref_id"].shift.strip
+
+              .form-group{ class:  if @payment.errors.key?("employee_id") then "has-error" end }
+                = f.label :employee_id, "Employee", class: "control-label col-md-3"
+                .col-md-4
+                  = f.collection_select :employee_id, Employee.active, :id, :name, {include_blank: "Select Employee"}, {class: "form-control"}
+                - if @payment.errors.key? "employee_id"
+                  %label.control-label= @payment.errors["employee_id"].shift.strip
+
+              .form-group{ class:  if @payment.errors.key?("description") then "has-error" end }
+                = f.label :description, "Remarks", class: "control-label col-md-3"
+                .col-md-4
+                  = f.text_area :description, class: "form-control"
+                - if @payment.errors.key? "description"
+                  %label.control-label= @payment.errors["description"].shift.strip
+
+            .form-actions
+              .row
+                .col-md-offset-3.col-md-9
+                  =  f.submit "ADD PAYMENT", class: "btn green"
+                  =  link_to "Back", "/payments/#{@doc.id}", class: "btn"

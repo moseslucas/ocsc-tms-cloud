@@ -1,9 +1,69 @@
 class PaymentsController < ApplicationController
   include DocumentsHelper
+  include SmartListing::Helper::ControllerExtensions
+  helper SmartListing::Helper
+
+  before_action :set_params, only: [:create]
 
   before_action :get_inital_report, only: [:cargo_collect_report, :cargo_transaction_report]
 
   def daily_report
+  end
+
+  def create
+    @payment = Payment.new @params
+    @payment.id = generate_id("MSTR-PAY",Payment)
+		if @payment.save 
+      document = Document.find(@params[:document_id])
+      total_amount = document.total_amount
+      paid = document.payments.where(payments: {status: 1}).sum(:amount)
+      if (total_amount - paid === 0)
+        document.update_attribute(:status1, 2) 
+      else
+        document.update_attribute(:status1, 1) 
+      end
+			redirect_to "/payments/#{@payment.document_id}"
+		else
+      redirect_to action: "add", id: @payment.document_id
+		end
+  end
+
+  def add
+    @doc = Document.includes(:payments).find(params[:id])
+    @payment = Payment.new
+    @paid = @doc.payments.where(payments: {status: 1}).sum(:amount)
+  end
+
+  def show
+    @doc = Document.includes(:payments).find(params[:id])
+    @payments = @doc.payments.where(payments: {status: 1})
+    @paid = @doc.payments.where(payments: {status: 1}).sum(:amount)
+  end
+
+  def destroy
+    @payment = Payment.find(params[:id])
+    document_id = @payment.document_id
+    @payment.update_attribute :status, 0
+    document = Document.find(document_id)
+    total_amount = document.total_amount
+    paid = document.payments.where(payments: {status: 1}).sum(:amount)
+    if (total_amount - paid === 0)
+      document.update_attribute(:status1, 2) 
+    else
+      document.update_attribute(:status1, 1) 
+    end
+    redirect_to "/payments/#{document_id}"
+  end
+
+  def collection
+    collection_scope = Document.includes(:payments).cargo.not_cancelled
+    # collection_scope = collection_scope.search(params[:filter]) if params[:filter]
+    @collection = smart_listing_create(
+      :collections,
+      collection_scope,
+      partial: "collections/list",
+      default_sort: {updated_at: "desc"}
+    )
   end
 
   def soa
@@ -103,6 +163,18 @@ class PaymentsController < ApplicationController
       :payments
     ).from_exact_branch(session[:branch])
     .where(documents: {trans_date: params[:date]})
+  end
+
+  def set_params
+    @params = params.require(:payment).permit(
+      :document_id,
+      :amount,
+      :trans_date,
+      :deposit_date,
+      :ref_id,
+      :employee_id,
+      :description
+    )
   end
 
 end
