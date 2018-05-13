@@ -1,4 +1,4 @@
-%td= o.ref_id
+%td= "#{o.branch[0][0..2].upcase}-#{o.ref_id}"
 %td= o.client.name
 %td= o.trans_date
 %td= o.branch[0].titleize
