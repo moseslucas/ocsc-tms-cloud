@@ -14,4 +14,4 @@
 -# %td= o.payments.sum(:amount)
 -# %td= (o.total_amount - (o.payments.sum(:amount)))
 %td
-  = button_to "View", class: "btn dark btn-outline"
+  = button_to "View", payment_path(o), method: "get", class: "btn dark btn-outline"

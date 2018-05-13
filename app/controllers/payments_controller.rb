@@ -8,6 +8,12 @@ class PaymentsController < ApplicationController
   def daily_report
   end
 
+  def show
+    @doc = Document.includes(:payments).find(params[:id])
+    @payments = @doc.payments.where(payments: {status: 1})
+    @paid = @doc.payments.where(payments: {status: 1}).sum(:amount)
+  end
+
   def collection
     collection_scope = Document.includes(:payments).cargo.not_cancelled
     # collection_scope = collection_scope.search(params[:filter]) if params[:filter]
