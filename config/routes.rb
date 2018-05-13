@@ -26,4 +26,6 @@ Rails.application.routes.draw do
   get 'soa', to: 'payments#soa'
   get 'soa_print', to: 'payments#soa_print'
 
+  get 'collections', to: 'collections#index'
+
 end

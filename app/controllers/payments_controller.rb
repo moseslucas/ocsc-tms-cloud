@@ -1,9 +1,22 @@
 class PaymentsController < ApplicationController
   include DocumentsHelper
+  include SmartListing::Helper::ControllerExtensions
+  helper SmartListing::Helper
 
   before_action :get_inital_report, only: [:cargo_collect_report, :cargo_transaction_report]
 
   def daily_report
+  end
+
+  def collection
+    collection_scope = Document.includes(:payments).cargo.not_cancelled
+    # collection_scope = collection_scope.search(params[:filter]) if params[:filter]
+    @collection = smart_listing_create(
+      :collections,
+      collection_scope,
+      partial: "collections/list",
+      default_sort: {updated_at: "desc"}
+    )
   end
 
   def soa

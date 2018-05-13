@@ -1,0 +1,22 @@
+- unless smart_listing.empty?
+  %table.table.table-striped
+    %thead
+      %th= smart_listing.sortable "CWB", :id
+      %th= smart_listing.sortable "Client", :id
+      %th= smart_listing.sortable "Date", :id
+      %th= smart_listing.sortable "Branch", :id
+      %th= smart_listing.sortable "Desitnation", :id
+      %th= smart_listing.sortable "Status", :id
+      %th= smart_listing.sortable "Total", :id
+      %th= smart_listing.sortable "Paid", :id
+      %th= smart_listing.sortable "Balance", :id
+      %th
+    %tbody
+      - smart_listing.collection.each do |o|
+        %tr
+          = smart_listing.render object: o, partial: "collections/record", locals: {o: o}
+  = smart_listing.paginate
+  = smart_listing.pagination_per_page_links
+- else
+  %h1.text-center No Records Found
+  %h1.text-center= image_tag "search2.gif", class: "no-records-found"

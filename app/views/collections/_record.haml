@@ -1,0 +1,19 @@
+%td= o.ref_id
+%td= o.client.name
+%td= o.trans_date
+%td= o.branch[0].titleize
+%td= o.destination.name
+%td
+  - if o.status1 == 1
+    %span.label.label-warning
+      OPEN
+  - elsif o.status1 == 2
+    %span.label.label-default
+      CLOSED
+%td= o.total_amount
+%td= o.payments.sum(:amount)
+%td= (o.total_amount - (o.payments.sum(:amount)))
+%td
+  .btn-group.btn-group-xs.btn-group-solid
+    -# = link_to "Edit/View", edit_client_path(o), class: "btn btn-xs green"
+    -# = link_to "Delete", client_path(o), method: :delete, data: {confirm: 'Are you sure?'}, class: "btn btn-xs red"
