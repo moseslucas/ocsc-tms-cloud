@@ -11,25 +11,30 @@ class PaymentsController < ApplicationController
   end
 
   def create
-    @payment = Payment.new @params
-    @payment.id = generate_id("MSTR-PAY",Payment)
-		if @payment.save 
-      document = Document.find(@params[:document_id])
-      total_amount = document.total_amount
-      paid = document.payments.where(payments: {status: 1}).sum(:amount)
-      if (total_amount - paid === 0)
-        document.update_attribute(:status1, 2) 
+    document = Document.find(@params[:document_id])
+    if document.status1 === 2
+      redirect_to "/payments/#{document.id}" 
+    else
+      @payment = Payment.new @params
+      @payment.id = generate_id("MSTR-PAY",Payment)
+      if @payment.save 
+        total_amount = document.total_amount
+        paid = document.payments.where(payments: {status: 1}).sum(:amount)
+        if (total_amount - paid === 0)
+          document.update_attribute(:status1, 2) 
+        else
+          document.update_attribute(:status1, 1) 
+        end
+        redirect_to "/payments/#{@payment.document_id}"
       else
-        document.update_attribute(:status1, 1) 
+        redirect_to action: "add", id: @payment.document_id
       end
-			redirect_to "/payments/#{@payment.document_id}"
-		else
-      redirect_to action: "add", id: @payment.document_id
-		end
+    end
   end
 
   def add
     @doc = Document.includes(:payments).find(params[:id])
+    redirect_to "/payments/#{@doc.id}" if @doc.status1 === 2
     @payment = Payment.new
     @paid = @doc.payments.where(payments: {status: 1}).sum(:amount)
   end
