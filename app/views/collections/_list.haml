@@ -1,15 +1,15 @@
 - unless smart_listing.empty?
   %table.table.table-striped
     %thead
-      %th= smart_listing.sortable "CWB", :id
-      %th= smart_listing.sortable "Client", :id
-      %th= smart_listing.sortable "Date", :id
-      %th= smart_listing.sortable "Branch", :id
-      %th= smart_listing.sortable "Desitnation", :id
-      %th= smart_listing.sortable "Status", :id
-      %th= smart_listing.sortable "Total", :id
-      %th= smart_listing.sortable "Paid", :id
-      %th= smart_listing.sortable "Balance", :id
+      %th= smart_listing.sortable "CWB", :ref_id
+      %th= smart_listing.sortable "Client", :client_id
+      %th= smart_listing.sortable "Date", :trans_date
+      %th= smart_listing.sortable "Branch", :branch[0]
+      %th= smart_listing.sortable "Desitnation", :destination_id
+      %th Status
+      %th= smart_listing.sortable "Total", :total_amount
+      %th Paid
+      %th Balance
       %th
     %tbody
       - smart_listing.collection.each do |o|
