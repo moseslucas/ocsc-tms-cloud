@@ -116,7 +116,9 @@
         PHP #{number_with_delimiter sprintf '%.2f',@doc.total_amount, delimiter:','}
       %br/
       - if @doc.status1==1
-        %button.btn.btn-lg.green.hidden-print.margin-bottom-5.add_payment Add Payment
+        %a{href: "/add_payment/#{@doc.id}"}
+          %button.btn.btn-lg.green.hidden-print.margin-bottom-5
+            ADD PAYMENT
     %hr/
     .row
       .col-xs-12

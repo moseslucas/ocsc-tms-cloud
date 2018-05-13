@@ -26,6 +26,7 @@ Rails.application.routes.draw do
   get 'cargo_collect', to: 'payments#cargo_collect_report'
   get 'soa', to: 'payments#soa'
   get 'soa_print', to: 'payments#soa_print'
+  get '/add_payment/:id', to: 'payments#add'
 
   get 'collections', to: 'collections#index'
 

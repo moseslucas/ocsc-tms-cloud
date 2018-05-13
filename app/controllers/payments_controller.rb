@@ -8,6 +8,12 @@ class PaymentsController < ApplicationController
   def daily_report
   end
 
+  def add
+    @doc = Document.includes(:payments).find(params[:id])
+    @payment = Payment.new
+    @paid = @doc.payments.where(payments: {status: 1}).sum(:amount)
+  end
+
   def show
     @doc = Document.includes(:payments).find(params[:id])
     @payments = @doc.payments.where(payments: {status: 1})
