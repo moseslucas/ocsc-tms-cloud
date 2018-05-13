@@ -3,9 +3,21 @@ class PaymentsController < ApplicationController
   include SmartListing::Helper::ControllerExtensions
   helper SmartListing::Helper
 
+  before_action :set_params, only: [:create]
+
   before_action :get_inital_report, only: [:cargo_collect_report, :cargo_transaction_report]
 
   def daily_report
+  end
+
+  def create
+    @payment = Payment.new @params
+    @payment.id = generate_id("MSTR-PAT",Payment)
+		if @payment.save 
+			redirect_to "/payments/#{@payment.document_id}"
+		else
+      redirect_to action: "add", id: @payment.document_id
+		end
   end
 
   def add
@@ -128,6 +140,18 @@ class PaymentsController < ApplicationController
       :payments
     ).from_exact_branch(session[:branch])
     .where(documents: {trans_date: params[:date]})
+  end
+
+  def set_params
+    @params = params.require(:payment).permit(
+      :document_id,
+      :amount,
+      :trans_date,
+      :deposit_date,
+      :ref_id,
+      :employee_id,
+      :description
+    )
   end
 
 end
