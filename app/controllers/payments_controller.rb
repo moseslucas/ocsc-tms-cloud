@@ -17,6 +17,13 @@ class PaymentsController < ApplicationController
     else
       @payment = Payment.new @params
       @payment.id = generate_id("MSTR-PAY",Payment)
+
+      total_amount = document.total_amount
+      paid = document.payments.where(payments: {status: 1}).sum(:amount)
+      if @payment.amount > (total_amount - paid)
+        @payment.amount = (total_amount - paid)
+      end
+
       if @payment.save 
         total_amount = document.total_amount
         paid = document.payments.where(payments: {status: 1}).sum(:amount)
