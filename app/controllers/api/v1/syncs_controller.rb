@@ -14,12 +14,12 @@ class Api::V1::SyncsController < ApplicationController
     # byebug
     @params = @params.to_h
     for i in 0...@params[:sync_in].count
-      sync_in = @params[:sync_in]["#{i}"]
+      sync_in = @params[:sync_in][@params[:cron_sync] ? i : "#{i}"]
       model = sync_in[:model_name].constantize
 
       if sync_in[:records]
         for j in 0...sync_in[:records].count
-          record = sync_in[:records]["#{j}"]
+          record = sync_in[:records][@params[:cron_sync] ? j : "#{j}"]
           if model.find_by id: record[:id]
             existing_record = model.find_by id: record[:id]
             if existing_record.updated_at < record[:updated_at].to_datetime
@@ -31,7 +31,7 @@ class Api::V1::SyncsController < ApplicationController
           else
             model_param = {}
             record.keys.each do |key|
-              model_param[key] = record["#{key}"]
+              model_param[key] = record[@params[:cron_sync ? key : "#{key}"]]
             end
             model_param[:branch] = [@params[:branch]] unless !@params[:branch]
             model_param[:id_from_branch] = [record[:id]]
