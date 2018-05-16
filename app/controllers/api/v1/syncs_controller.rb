@@ -31,7 +31,7 @@ class Api::V1::SyncsController < ApplicationController
           else
             model_param = {}
             record.keys.each do |key|
-              model_param[key] = record[@params[:cron_sync ? key : "#{key}"]]
+              model_param[key] = record[@params[:cron_sync] ? key : "#{key}"]
             end
             model_param[:branch] = [@params[:branch]] unless !@params[:branch]
             model_param[:id_from_branch] = [record[:id]]
