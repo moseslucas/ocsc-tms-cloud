@@ -133,6 +133,7 @@ class PaymentsController < ApplicationController
   def cargo_collect_report
     @date = params[:date]
     @report = @initial_report
+    .cargo
     .where(payments: {payment_type: nil})
     .or(@initial_report.where(payments: {payment_type: "collect"}))
   end

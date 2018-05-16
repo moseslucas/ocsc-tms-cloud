@@ -17,7 +17,7 @@ class DiscountsController < ApplicationController
 
   def create
     @discount = Discount.new @params
-    @discount.id = generate_id("MSTR",Discount)
+    @discount.id = generate_id("MSTR-DIS",Discount)
 		if @discount.save 
 			redirect_to discounts_path, notice: "Discount was successfully created"
 		else
