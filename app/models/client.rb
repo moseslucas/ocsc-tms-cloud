@@ -7,14 +7,12 @@ class Client < ApplicationRecord
       (description ILIKE ?) OR
       (contact ILIKE ?) OR
       (email ILIKE ?) OR
-      (address ILIKE ?) OR
-      (credit_limit = ?)",
+      (address ILIKE ?)",
       "%#{filter.strip}%",
       "%#{filter.strip}%",
       "%#{filter.strip}%",
       "%#{filter.strip}%",
-      "%#{filter.strip}%",
-      filter.strip.to_i
+      "%#{filter.strip}%"
     )
   }
 
