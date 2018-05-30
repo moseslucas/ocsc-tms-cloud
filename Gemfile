@@ -19,6 +19,8 @@ gem 'redis', '~> 3.0'
 gem 'bcrypt', '~> 3.1.7'
 gem "select2-rails"
 gem "font-awesome-rails"
+gem 'webpacker'
+gem 'react-rails'
 
 group :development do
   gem 'capistrano',         require: false
