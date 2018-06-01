@@ -29,5 +29,6 @@ Rails.application.routes.draw do
   get '/add_payment/:id', to: 'payments#add'
 
   get 'collections', to: 'collections#index'
+  get 'collection_by_clients', to: 'collection_by_clients#index'
 
 end
