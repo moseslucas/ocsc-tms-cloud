@@ -16,6 +16,7 @@ class CollectionByClientsController < ApplicationController
   end
 
   def cargos
+    @date = DateTime.now.strftime '%Y-%m-%d'
     @client = Client.find params[:id]
     cargos = Document.includes(:client, :destination, :calculation)
     .cargo

@@ -1,5 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
+import ModalPayment from './ModalPayment'
+
 class CollectionByClients extends React.Component {
   constructor (props) {
     super(props)
@@ -35,7 +37,9 @@ class CollectionByClients extends React.Component {
           <label><strong> {`SELECTED: ${checkedCargos.length}`} </strong></label>
         </div>
         <div className='col-xs-5'>
-          <button className='btn btn-lg green-jungle btn-block'>
+          <button 
+              onClick={ () => $('#payments_modal_new').modal('show') }
+              className='btn btn-lg green-jungle btn-block'>
             MAKE PAYMENT
           </button>
         </div>
@@ -79,6 +83,7 @@ class CollectionByClients extends React.Component {
     const { checkedCargos } = this.state
     return (
       <React.Fragment>
+        <ModalPayment date={this.props.date}/>
         { checkedCargos.length > 0 && this.selection() }
         <table className='table table-striped'>
           <thead>
