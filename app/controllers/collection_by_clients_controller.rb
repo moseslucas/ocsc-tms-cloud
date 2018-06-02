@@ -17,6 +17,26 @@ class CollectionByClientsController < ApplicationController
 
   def cargos
     @client = Client.find params[:id]
+    cargos = Document.includes(:client, :destination, :calculation)
+    .cargo
+    .not_cancelled
+    .has_cargo_calculation
+    .where({
+      status1: 1,
+      clients: {id: @client.id}
+    })
+    @cargos = cargos.map do |c|
+      {
+        cwb: "#{c.branch[0][0..2].upcase}-#{c.ref_id}",
+        shipper: c.shipper,
+        date: c.trans_date,
+        destination: c.destination.name,
+        status1: if c.status1 == 1 then "OPEN" elsif c.status1 == 2 then "CLOSED" end,
+        total: c.total_amount,
+        balance: 0,
+        payment: "p"
+      }
+    end
   end
 
   def get_total_balance(client)
