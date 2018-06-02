@@ -45,6 +45,7 @@ class CollectionByClientsController < ApplicationController
         payment: "p"
       }
     end
+    @employees = Employee.active.order('name ASC')
   end
 
   def get_total_balance(client)

@@ -85,9 +85,15 @@ class CollectionByClients extends React.Component {
   }
   render () {
     const { checkedCargos } = this.state
+    const { date, client, employees } = this.props
     return (
       <React.Fragment>
-        <ModalPayment date={this.props.date}/>
+        <ModalPayment
+          date={date}
+          client={client}
+          checkedCargos={checkedCargos}
+          employees={employees}
+        />
         { checkedCargos.length > 0 && this.selection() }
         <table className='table table-striped'>
           <thead>
