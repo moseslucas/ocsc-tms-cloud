@@ -30,5 +30,6 @@ Rails.application.routes.draw do
 
   get 'collections', to: 'collections#index'
   get 'collection_by_clients', to: 'collection_by_clients#index'
+  get '/collection_by/:id', to: 'collection_by_clients#cargos'
 
 end

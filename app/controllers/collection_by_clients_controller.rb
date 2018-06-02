@@ -15,6 +15,10 @@ class CollectionByClientsController < ApplicationController
     )
   end
 
+  def cargos
+    @client = Client.find params[:id]
+  end
+
   def get_total_balance(client)
     total = client.documents
     .includes(:client, :destination, :calculation)
