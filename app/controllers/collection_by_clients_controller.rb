@@ -27,6 +27,12 @@ class CollectionByClientsController < ApplicationController
       clients: {id: @client.id}
     })
     @cargos = cargos.map do |c|
+      payment = @client.payments
+      .includes(:document)
+      .where(document_id: c.id)
+      .where.not(documents: {status1: 2})
+      .where.not(payments: {status: 0})
+      .sum(:amount)
       {
         id: c.id,
         cwb: "#{c.branch[0][0..2].upcase}-#{c.ref_id}",
@@ -35,7 +41,7 @@ class CollectionByClientsController < ApplicationController
         destination: c.destination.name,
         status1: if c.status1 == 1 then "OPEN" elsif c.status1 == 2 then "CLOSED" end,
         total: c.total_amount,
-        balance: 0,
+        balance: c.total_amount - payment,
         payment: "p"
       }
     end

@@ -18,7 +18,7 @@ class CollectionByClients extends React.Component {
 
   selection () {
     const { checkedCargos } = this.state
-    const total = 0
+    const total = checkedCargos.reduce((sum, value) => sum + parseFloat(value.balance), 0)
     return <div style={styles}>
       <div className='row'>
         <div className='col-xs-1'>
@@ -31,7 +31,7 @@ class CollectionByClients extends React.Component {
           </button>
         </div>
         <div className='col-xs-3' style={{ marginTop: '12px' }}>
-          <label><strong> {`PHP: ${total}`} </strong></label>
+          <label><strong> {`PHP: ${total.toFixed(2)}`} </strong></label>
         </div>
         <div className='col-xs-3' style={{ marginTop: '12px' }}>
           <label><strong> {`SELECTED: ${checkedCargos.length}`} </strong></label>
