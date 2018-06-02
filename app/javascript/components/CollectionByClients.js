@@ -64,7 +64,11 @@ class CollectionByClients extends React.Component {
         <td> {c.shipper} </td>
         <td> {c.date} </td>
         <td> {c.destination} </td>
-        <td> {c.status1} </td>
+        <td>
+          <span className={`label label-${c.status1 === 'OPEN' ? 'warning' : 'default'}`}>
+            {c.status1}
+          </span>
+        </td>
         <td> {c.total} </td>
         <td> {c.balance} </td>
         <td>

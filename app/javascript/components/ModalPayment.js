@@ -14,17 +14,6 @@ const ModalPayment = ({ date }) => {
             <form role="form" id="payments_form">
               <div className="row">
                 <div className="col-md-4">
-                  <div className="md-checkbox form-group form-md-line-input">
-                    <div className="md-checkbox">
-                      <input type="checkbox" id="checkbox1" className="md-check" />
-                        <label> Full Amount </label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="row">
-                <div className="col-md-4">
                   <div id="div_f_amount" className="form-group form-md-line-input">
                     <input type="number" className="form-control md" id="f_amount" name="f_amount" />
                     <label>Amount</label>
