@@ -27,6 +27,7 @@ class CollectionByClientsController < ApplicationController
     })
     @cargos = cargos.map do |c|
       {
+        id: c.id,
         cwb: "#{c.branch[0][0..2].upcase}-#{c.ref_id}",
         shipper: c.shipper,
         date: c.trans_date,
