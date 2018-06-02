@@ -3,17 +3,52 @@ import PropTypes from "prop-types"
 class CollectionByClients extends React.Component {
   constructor (props) {
     super(props)
+    this.cancelSelection = this.cancelSelection.bind(this)
     this.state = {
       checkedCargos: []
     }
   }
 
-  checked (e, id) {
+  cancelSelection () {
+    this.setState({ checkedCargos: [] })
+    $('.checkbox').removeAttr('checked')
+  }
+
+  selection () {
+    const { checkedCargos } = this.state
+    const total = 0
+    return <div style={styles}>
+      <div className='row'>
+        <div className='col-xs-1'>
+          <button 
+              onClick={this.cancelSelection}
+              title='Cancel Selection'
+              className='btn btn-lg btn-outline btn-block'
+              style={{ backgroundColor: '#EFF3F8' }}>
+            <i className='fa fa-close' style={{ color: 'red' }} />
+          </button>
+        </div>
+        <div className='col-xs-3' style={{ marginTop: '12px' }}>
+          <label><strong> {`PHP: ${total}`} </strong></label>
+        </div>
+        <div className='col-xs-3' style={{ marginTop: '12px' }}>
+          <label><strong> {`SELECTED: ${checkedCargos.length}`} </strong></label>
+        </div>
+        <div className='col-xs-5'>
+          <button className='btn btn-lg green-jungle btn-block'>
+            MAKE PAYMENT
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  checked (e, cargo) {
     let newCheckedCargos = this.state.checkedCargos
     if (e.target.checked) {
-      newCheckedCargos = newCheckedCargos.concat(id)
+      newCheckedCargos = newCheckedCargos.concat(cargo)
     } else {
-      newCheckedCargos = newCheckedCargos.filter( cargoIds => cargoIds !== id )
+      newCheckedCargos = newCheckedCargos.filter( checkedCargo => checkedCargo.id !== cargo.id )
     }
     this.setState({ checkedCargos: newCheckedCargos })
   }
@@ -30,15 +65,21 @@ class CollectionByClients extends React.Component {
         <td> {c.balance} </td>
         <td>
           <div className='checkbox'>
-            <label><input type='checkbox' onChange={ e => this.checked(e, c.id) } /></label>
+            <label><input
+              className='checkbox'
+              type='checkbox'
+              onChange={ e => this.checked(e, c) } />
+            </label>
           </div>
         </td>
       </tr>
     })
   }
   render () {
+    const { checkedCargos } = this.state
     return (
       <React.Fragment>
+        { checkedCargos.length > 0 && this.selection() }
         <table className='table table-striped'>
           <thead>
             <tr>
@@ -59,6 +100,16 @@ class CollectionByClients extends React.Component {
       </React.Fragment>
     );
   }
+}
+
+const styles = {
+  position: 'fixed',
+  left: 0,
+  bottom: 0,
+  width: '100%',
+  backgroundColor: '#EFF3F8',
+  textAlign: 'center',
+  zIndex: 3000
 }
 
 export default CollectionByClients
