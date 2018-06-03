@@ -3,7 +3,7 @@ class PaymentsController < ApplicationController
   include SmartListing::Helper::ControllerExtensions
   helper SmartListing::Helper
 
-  before_action :set_params, only: [:create]
+  before_action :set_params, only: [:create, :create_multiple]
 
   before_action :get_inital_report, only: [:cargo_collect_report, :cargo_transaction_report]
 
@@ -36,6 +36,42 @@ class PaymentsController < ApplicationController
       else
         redirect_to action: "add", id: @payment.document_id
       end
+    end
+  end
+
+  def create_multiple
+    client = Client.find @params[:client][:id]
+    amount_due = @params[:documents].reduce(0) { |sum, element| sum + element[:balance].to_f }
+    payment = @params[:amount].to_f + client.over_payment.to_f
+
+    @params[:documents].each do |doc|
+      document = Document.find_by id: doc[:id]
+      each_payment = Payment.new do |p|
+        p.id = generate_id("MSTR-PAY",Payment)
+        p.document_id = doc[:id]
+        p.amount = doc[:balance]
+        p.ref_id = @params[:ref_id]
+        p.trans_date = @params[:trans_date]
+        p.description = @params[:description]
+        p.deposit_date = @params[:deposit_date]
+        p.employee_id = @params[:employee_id] if @params[:employee_id] != "none"
+      end
+      if each_payment.save
+        total_amount = document.total_amount
+        paid = document.payments.where(payments: {status: 1}).sum(:amount)
+        if (total_amount - paid === 0)
+          document.update_attribute(:status1, 2) 
+        else
+          document.update_attribute(:status1, 1) 
+        end
+      end
+    end
+
+    client.over_payment = (amount_due - payment).abs
+    if client.save
+      render json: {status: "OK"}
+    else
+      render json: {status: "error"}
     end
   end
 
@@ -179,15 +215,7 @@ class PaymentsController < ApplicationController
   end
 
   def set_params
-    @params = params.require(:payment).permit(
-      :document_id,
-      :amount,
-      :trans_date,
-      :deposit_date,
-      :ref_id,
-      :employee_id,
-      :description
-    )
+    @params = params.require(:payment).permit!
   end
 
 end

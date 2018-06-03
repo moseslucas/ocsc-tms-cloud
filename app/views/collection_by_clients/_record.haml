@@ -1,0 +1,4 @@
+%td= o.name
+%td= "PHP #{number_with_delimiter sprintf '%.2f', (get_total_balance(o)), delimiter:','}"
+%td
+  = button_to "View", "/collection_by/#{o.id}", method: "get", class: "btn dark btn-outline"

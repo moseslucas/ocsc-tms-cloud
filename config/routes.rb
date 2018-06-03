@@ -19,7 +19,11 @@ Rails.application.routes.draw do
 
   resources :deliveries
   resources :cargos
-  resources :payments
+  resources :payments do
+    collection do
+      post :create_multiple
+    end
+  end
 
   get 'daily_report', to: 'payments#daily_report'
   get 'cargo_transaction', to: 'payments#cargo_transaction_report'
@@ -29,5 +33,7 @@ Rails.application.routes.draw do
   get '/add_payment/:id', to: 'payments#add'
 
   get 'collections', to: 'collections#index'
+  get 'collection_by_clients', to: 'collection_by_clients#index'
+  get '/collection_by/:id', to: 'collection_by_clients#cargos'
 
 end
