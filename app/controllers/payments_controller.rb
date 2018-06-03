@@ -54,6 +54,7 @@ class PaymentsController < ApplicationController
         p.trans_date = @params[:trans_date]
         p.description = @params[:description]
         p.deposit_date = @params[:deposit_date]
+        p.employee_id = @params[:employee_id] if @params[:employee_id] != "none"
       end
       if each_payment.save
         total_amount = document.total_amount

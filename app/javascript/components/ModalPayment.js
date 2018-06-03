@@ -1,5 +1,6 @@
 import React from 'react'
 import axios from 'axios'
+import swal from 'sweetalert'
 
 const ModalPayment = ({
   date,
@@ -7,35 +8,50 @@ const ModalPayment = ({
   checkedCargos,
   employees
 }) => {
-  const total = checkedCargos.reduce((sum, value) => sum + parseFloat(value.balance), 0)
+  const total = checkedCargos.reduce((sum, value) => sum + parseFloat(value.balance), 0).toFixed(2)
   const overPayment = client.over_payment ? client.over_payment : 0
+  const minPayment = overPayment >= total ? 0 : (total-overPayment).toFixed(2)
+  $('#amount').val(minPayment)
   // $('#f_employees').select2({ theme: 'bootstrap' })
 
   const confirm = () => {
-    const data = {
-      payment: {
-        client,
-        amount: $('#amount').val(),
-        trans_date: $('#f_trans_date').val(),
-        deposit_date: $('#f_deposit_date').val(),
-        ref_id: $('#f_ref_id').val(),
-        employee_id: $('#f_employees').val(),
-        description: $('#f_description').val(),
-        documents: checkedCargos
+    const amountField = parseFloat($('#amount').val())
+    if ( amountField < minPayment || isNaN(amountField)) {
+      $('#payments_modal_new').modal('hide')
+      swal({ text: `Minimum Payment is PHP ${minPayment}`, icon: 'warning'})
+      $('#amount').val(minPayment)
+    } else {
+      $('#btn_confirm').prop('disabled', true)
+      const data = {
+        payment: {
+          client,
+          amount: $('#amount').val(),
+          trans_date: $('#f_trans_date').val(),
+          deposit_date: $('#f_deposit_date').val(),
+          ref_id: $('#f_ref_id').val(),
+          employee_id: $('#f_employees').val(),
+          description: $('#f_description').val(),
+          documents: checkedCargos
+        }
       }
-    }
 
-    axios({
-      method: 'POST',
-      url: '/payments/create_multiple/',
-      data
-    }).then( data => {
-      if (data.status === 200) {
-        setTimeout(location.reload.bind(location), 5000);
-      } else {
-      }
-    })
+      axios({
+        method: 'POST',
+        url: '/payments/create_multiple/',
+        data
+      }).then( data => {
+        if (data.status === 200) {
+          $('#payments_modal_new').modal('hide')
+          swal({ title: 'Complete', text: `Made Payments to ${checkedCargos.length} cargos`, icon: 'success' })
+          setTimeout(location.reload.bind(location), 3000)
+        } else {
+          swal({ text: 'Something went wrong', icon: 'warning'})
+          $('#btn_confirm').prop('disabled', false)
+        }
+      })
+    }
   }
+
 
   return (
     <div className="modal fade" id="payments_modal_new" aria-hidden="true">
@@ -54,7 +70,6 @@ const ModalPayment = ({
                     id='amount'
                     type="number"
                     className="form-control md"
-                    defaultValue={ overPayment >= total ? 0 : (total-overPayment) }
                   />
                   <label>Enter Payment</label>
                   <span className="help-block">Enter Payment Amount</span>
