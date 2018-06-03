@@ -1,4 +1,5 @@
 import React from 'react'
+import axios from 'axios'
 
 const ModalPayment = ({
   date,
@@ -12,15 +13,26 @@ const ModalPayment = ({
 
   const confirm = () => {
     const data = {
-      amount: $('#amount').val(),
-      trans_date: $('#f_trans_date').val(),
-      deposit_date: $('#f_deposit_date').val(),
-      ref_id: $('#f_ref_id').val(),
-      employee: $('#f_employees').val(),
-      description: $('#f_description').val()
+      payment: {
+        client,
+        amount: $('#amount').val(),
+        trans_date: $('#f_trans_date').val(),
+        deposit_date: $('#f_deposit_date').val(),
+        ref_id: $('#f_ref_id').val(),
+        employee_id: $('#f_employees').val(),
+        description: $('#f_description').val(),
+        documents: checkedCargos
+      }
     }
 
     console.log('confirm: ', data)
+    axios({
+      method: 'POST',
+      url: '/payments/create_multiple/',
+      data
+    }).then( data => {
+      console.log('axios result: ', data)
+    })
   }
 
   return (
@@ -40,7 +52,7 @@ const ModalPayment = ({
                     id='amount'
                     type="number"
                     className="form-control md"
-                    value={ overPayment >= total ? 0 : (total-overPayment) }
+                    defaultValue={ overPayment >= total ? 0 : (total-overPayment) }
                   />
                   <label>Enter Payment</label>
                   <span className="help-block">Enter Payment Amount</span>

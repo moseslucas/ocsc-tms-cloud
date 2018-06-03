@@ -3,7 +3,7 @@ class PaymentsController < ApplicationController
   include SmartListing::Helper::ControllerExtensions
   helper SmartListing::Helper
 
-  before_action :set_params, only: [:create]
+  before_action :set_params, only: [:create, :create_multiple]
 
   before_action :get_inital_report, only: [:cargo_collect_report, :cargo_transaction_report]
 
@@ -37,6 +37,14 @@ class PaymentsController < ApplicationController
         redirect_to action: "add", id: @payment.document_id
       end
     end
+  end
+
+  def create_multiple
+    client = Client.find @params[:client][:id]
+    amount_due = @params[:documents].reduce(0) { |sum, element| sum + element[:balance].to_f }
+    payment = @params[:amount].to_f + client.over_payment.to_f
+    client.update_attribute :over_payment, (amount_due - payment).abs
+    render json: "OK"
   end
 
   def add
@@ -179,15 +187,7 @@ class PaymentsController < ApplicationController
   end
 
   def set_params
-    @params = params.require(:payment).permit(
-      :document_id,
-      :amount,
-      :trans_date,
-      :deposit_date,
-      :ref_id,
-      :employee_id,
-      :description
-    )
+    @params = params.require(:payment).permit!
   end
 
 end
