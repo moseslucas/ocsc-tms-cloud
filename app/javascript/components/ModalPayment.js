@@ -25,13 +25,15 @@ const ModalPayment = ({
       }
     }
 
-    console.log('confirm: ', data)
     axios({
       method: 'POST',
       url: '/payments/create_multiple/',
       data
     }).then( data => {
-      console.log('axios result: ', data)
+      if (data.status === 200) {
+        setTimeout(location.reload.bind(location), 5000);
+      } else {
+      }
     })
   }
 

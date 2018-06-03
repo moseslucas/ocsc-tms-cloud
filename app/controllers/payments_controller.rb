@@ -43,8 +43,35 @@ class PaymentsController < ApplicationController
     client = Client.find @params[:client][:id]
     amount_due = @params[:documents].reduce(0) { |sum, element| sum + element[:balance].to_f }
     payment = @params[:amount].to_f + client.over_payment.to_f
-    client.update_attribute :over_payment, (amount_due - payment).abs
-    render json: "OK"
+
+    @params[:documents].each do |doc|
+      document = Document.find_by id: doc[:id]
+      each_payment = Payment.new do |p|
+        p.id = generate_id("MSTR-PAY",Payment)
+        p.document_id = doc[:id]
+        p.amount = doc[:balance]
+        p.ref_id = @params[:ref_id]
+        p.trans_date = @params[:trans_date]
+        p.description = @params[:description]
+        p.deposit_date = @params[:deposit_date]
+      end
+      if each_payment.save
+        total_amount = document.total_amount
+        paid = document.payments.where(payments: {status: 1}).sum(:amount)
+        if (total_amount - paid === 0)
+          document.update_attribute(:status1, 2) 
+        else
+          document.update_attribute(:status1, 1) 
+        end
+      end
+    end
+
+    client.over_payment = (amount_due - payment).abs
+    if client.save
+      render json: {status: "OK"}
+    else
+      render json: {status: "error"}
+    end
   end
 
   def add
