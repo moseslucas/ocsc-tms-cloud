@@ -8,6 +8,7 @@ class CollectionsController < ApplicationController
     .cargo
     .not_cancelled
     .has_cargo_calculation
+    .where( clients: {branch: ["master"]} )
     collection_scope = collection_scope.where(status1: params[:closed_payments] === "2" ? 2 : 1)
     collection_scope = collection_scope.cargo_search(params[:filter]) if params[:filter]
     @collection = smart_listing_create(
