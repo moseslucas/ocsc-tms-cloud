@@ -5,7 +5,7 @@ class CollectionByClientsController < ApplicationController
   helper_method :get_total_balance
 
   def index
-    client_scope = Client.active
+    client_scope = Client.active.premium
     client_scope = client_scope.search(params[:filter]) if params[:filter]
     @client = smart_listing_create(
       :clients,
