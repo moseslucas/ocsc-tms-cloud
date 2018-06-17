@@ -10,6 +10,17 @@
       .portlet.light.portlet-fit
         -# .portlet-title
           = #link_to "CREATE NEW", new_document_path, class: "btn green"
+        .portlet-title
+          = form_for :cargos, url: { action: :index }, method: :get do |f|
+            .row
+              .col-sm-8
+              .col-sm-2
+                .form-group
+                  %label Status
+                  = select_tag(:status2, options_for_select([["ALL", "ALL"],["FOR DELIVERY", 1], ["IN TRANSIT", 2], ["RELEASED", 3]]), {class: "form-control"})
+                  -# = f.collection_select :discount_id, ["0": {name: "FOR DELIVERY"}], :id, :name, {include_blank: "STATUS"}, {class: "form-control"}
+              .col-sm-2{ style: "padding-top: 20px" }
+                =  f.submit "FILTER", class: "btn btn-lg btn-block green"
         .portlet-body
           = smart_listing_controls_for(:cargos, {class: "form-inline text-right"}) do
             .checkbox
