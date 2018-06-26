@@ -10,10 +10,34 @@
       .portlet.light.portlet-fit
         -# .portlet-title
           = #link_to "CREATE NEW", new_document_path, class: "btn green"
+        .portlet-title
+          = form_for :cargos, url: { action: :index }, method: :get do |f|
+            .row
+              .col-sm-3
+                .form-group
+                  %label Date Range
+                  = text_field_tag :daterange, @f_daterange, class: "form-control"
+              .col-sm-2
+                .form-group
+                  %label CWB
+                  = text_field_tag :cwb, @f_cwb, class: "form-control"
+              .col-sm-3
+                .form-group
+                  %label Client
+                  = select_tag :client_id, options_for_select(Client.all.map { |c| [c.name, c.id]}, @f_client_id), include_blank: 'ALL', class: "form-control"
+              .col-sm-2
+                .form-group
+                  %label Status
+                  = select_tag(:status2, options_for_select([["ALL", ""],["FOR DELIVERY", 1], ["IN TRANSIT", 2], ["RELEASED", 3]], @f_status2), {class: "form-control"})
+              .col-sm-2{ style: "padding-top: 20px" }
+                .btn-group
+                  =  f.submit "FILTER", class: "btn green"
+                  =  f.submit "RESET", class: "btn"
         .portlet-body
-          = smart_listing_controls_for(:cargos, {class: "form-inline text-right"}) do
-            .checkbox
-            .form-group.filter.input-append
-              = text_field_tag :filter, '', class: "search form-control", 
-                                        placeholder: "Search", autocomplete: :off
           = smart_listing_render :cargos
+
+:javascript
+  $(document).ready(function(){
+    $('#client_id').select2({ theme: 'bootstrap' })
+    $('#daterange').daterangepicker()
+  })
