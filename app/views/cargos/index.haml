@@ -13,6 +13,10 @@
         .portlet-title
           = form_for :cargos, url: { action: :index }, method: :get do |f|
             .row
+              .col-sm-3
+                .form-group
+                  %label Date Range
+                  = text_field_tag :daterange, @f_daterange, class: "form-control"
               .col-sm-2
                 .form-group
                   %label CWB
@@ -38,4 +42,5 @@
 :javascript
   $(document).ready(function(){
     $('#client_id').select2({ theme: 'bootstrap' })
+    $('#daterange').daterangepicker()
   })

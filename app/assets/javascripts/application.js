@@ -23,3 +23,5 @@
 // require layout/demo.min
 //= require smart_listing
 //= require select2
+//= require global/plugins/moment.min
+//= require global/plugins/daterangepicker

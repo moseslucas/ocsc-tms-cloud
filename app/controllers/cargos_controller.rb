@@ -22,7 +22,12 @@ class CargosController < ApplicationController
       cargos_scope = cargos_scope.where( client_id: @f_client_id )
     end
     if @f_cwb && @f_cwb != ""
-      cargos_scope = cargos_scope.where( documents: {ref_id: @f_cwb} )
+      cargos_scope = cargos_scope.where( "documents.ref_id LIKE ?", "%#{@f_cwb}%" )
+    end
+    if @f_daterange && @f_daterange != ""
+      range_start = @f_daterange[0..9]
+      range_end = @f_daterange[13..22]
+      cargos_scope = cargos_scope.where("documents.trans_date >= ? AND documents.trans_date <= ?", range_start, range_end)
     end
     @cargos = smart_listing_create(
       :cargos,
@@ -42,6 +47,7 @@ class CargosController < ApplicationController
     @f_status2 = params[:status2]
     @f_client_id = params[:client_id]
     @f_cwb = params[:cwb]
+    @f_daterange = params[:daterange]
   end
 
 end
