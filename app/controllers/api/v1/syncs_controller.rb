@@ -11,8 +11,6 @@ class Api::V1::SyncsController < ApplicationController
   end
 
   def create
-    # byebug
-    byebug
     @params = @params.to_h
     for i in 0...@params[:sync_in].count
       sync_in = @params[:sync_in][@params[:cron_sync] ? i : "#{i}"]
