@@ -2,6 +2,7 @@ class PaymentsController < ApplicationController
   include DocumentsHelper
   include SmartListing::Helper::ControllerExtensions
   helper SmartListing::Helper
+  before_action :auth_user_type
 
   before_action :set_params, only: [:create, :create_multiple]
 

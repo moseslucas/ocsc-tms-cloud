@@ -17,7 +17,11 @@ Rails.application.routes.draw do
   delete '/logout', to: 'sessions#destroy'
   post '/switch', to: 'sessions#switch'
 
-  resources :deliveries
+  resources :deliveries do
+    collection do
+      post :master_set_delivery_description
+    end
+  end
   resources :cargos
   resources :payments do
     collection do
@@ -35,5 +39,8 @@ Rails.application.routes.draw do
   get 'collections', to: 'collections#index'
   get 'collection_by_clients', to: 'collection_by_clients#index'
   get '/collection_by/:id', to: 'collection_by_clients#cargos'
+
+  get '/master_deliveries', to: 'deliveries#master_index'
+  get '/master_delivery/:id', to: 'deliveries#master_show', as: :master_delivery
 
 end

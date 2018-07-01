@@ -5,4 +5,11 @@ module ApplicationHelper
     id+= count
     return id
   end
+
+  def auth_user_type
+    if session[:user_type] == "branch"
+      redirect_to root_path
+    end
+  end
+
 end

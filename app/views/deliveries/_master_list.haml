@@ -9,6 +9,7 @@
         %th Vehicle
         %th Source
         %th Destination
+        %th Remarks
         %th
     %tbody
       - smart_listing.collection.each do |t|
@@ -21,7 +22,8 @@
           %td= t.source.name
           %td= t.destination.name
           %td
-            = button_to "View", delivery_path(t), method: "get", class: "btn dark btn-outline"
+          %td
+            = button_to "View", master_delivery_path(t), method: "get", class: "btn dark btn-outline"
   = smart_listing.paginate
   = smart_listing.pagination_per_page_links
 - else

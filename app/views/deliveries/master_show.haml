@@ -40,41 +40,7 @@
   %hr/
   .row
     .col-xs-12
-      %table.table.table-striped.table-hover
-        %thead
-          %tr
-            %th #
-            %th CWB
-            %th Shipper
-            %th Consignee
-            / <th> Tags </th>
-            %th QTY
-            %th Description
-            %th Destination
-            %th Amount
-        %tbody
-          - i=1
-          - sub_total=0
-          - @doc.document_details.each do |c|
-            %tr
-              %td
-                = i
-              %td
-                = c.document_shipping.ref_id
-              %td
-                = c.document_shipping.shipper
-              %td
-                = c.document_shipping.client.name
-              / <td> <haml_silent></haml_silent> </td>
-              %td
-                = c.document_shipping.document_details.sum(:qty)
-              %td
-                = c.document_shipping.document_details.first.description
-              %td
-                = c.document_shipping.destination.name
-              %td
-                = number_with_delimiter sprintf '%.2f', c.document_shipping.total_amount, delimiter:','
-            - i+=1
+      = react_component "MasterDeliveryItems", { items: @items , doc: @doc}
   -# .row
   -#   .col-xs-8.invoice-block
   -#     .btn-group
