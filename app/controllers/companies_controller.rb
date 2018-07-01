@@ -1,5 +1,6 @@
 class CompaniesController < ApplicationController
   before_action :get_record, only: [:index]
+  before_action :auth_user_type
 
   def index 
     render json: @companies

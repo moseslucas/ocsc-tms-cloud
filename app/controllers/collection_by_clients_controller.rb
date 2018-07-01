@@ -3,6 +3,7 @@ class CollectionByClientsController < ApplicationController
   include SmartListing::Helper::ControllerExtensions
   helper SmartListing::Helper
   helper_method :get_total_balance
+  before_action :auth_user_type
 
   def index
     client_scope = Client.active.premium

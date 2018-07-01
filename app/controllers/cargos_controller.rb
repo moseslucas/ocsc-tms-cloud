@@ -2,6 +2,7 @@ class CargosController < ApplicationController
   include DocumentsHelper
   include SmartListing::Helper::ControllerExtensions
   helper SmartListing::Helper
+  before_action :auth_user_type
   before_action :set_filters, only: :index
 
   def index 

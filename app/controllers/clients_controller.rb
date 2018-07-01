@@ -1,6 +1,7 @@
 class ClientsController < ApplicationController
   include SmartListing::Helper::ControllerExtensions
   helper SmartListing::Helper
+  before_action :auth_user_type
   before_action :set_params, only: [:create, :update]
   before_action :find_record, only: [:edit, :update, :destroy]
 

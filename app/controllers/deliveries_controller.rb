@@ -2,6 +2,7 @@ class DeliveriesController < ApplicationController
   include DocumentsHelper
   include SmartListing::Helper::ControllerExtensions
   helper SmartListing::Helper
+  before_action :auth_user_type, except: [:master_index, :master_show, :master_set_delivery_description]
   before_action :set_filters, only: :master_index
   before_action :set_delivery_description, only: :master_set_delivery_description
 
