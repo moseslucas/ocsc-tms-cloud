@@ -29,20 +29,28 @@ class MasterDeliveryItems extends React.Component {
 
   records () {
     const { items } = this.props
-    return items.map((item, i) => {
+    if (items.length > 0) {
+      return items.map((item, i) => {
+        return (
+          <tr key={i+1}>
+            <td>{i}</td>
+            <td>{item.ref_id}</td>
+            <td>{item.shipper}</td>
+            <td>{item.consignee}</td>
+            <td>{item.qty}</td>
+            <td>{item.description}</td>
+            <td>{item.destination}</td>
+            <td>{item.amount}</td>
+          </tr>
+        )
+      })
+    } else {
       return (
-        <tr key={i}>
-          <td>{i}</td>
-          <td>{item.ref_id}</td>
-          <td>{item.shipper}</td>
-          <td>{item.consignee}</td>
-          <td>{item.qty}</td>
-          <td>{item.description}</td>
-          <td>{item.destination}</td>
-          <td>{item.amount}</td>
+        <tr>
+          <td colspan='8'> No Records </td>
         </tr>
       )
-    })
+    }
   }
 
   render () { 
