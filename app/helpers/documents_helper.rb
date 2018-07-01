@@ -1,27 +1,27 @@
 module DocumentsHelper
   def status1_meaning(status)
     if status == 0
-      "CANCELLED"
+      "<span class='label label-default'>CANCELLED</span>".html_safe
     elsif status == 1
-      "OPEN"
+      "<span class='label label-warning'>OPEN</span>".html_safe
     elsif status == 2
-      "CLOSED"
+      "<span class='label label-default'>CLOSED</span>".html_safe
     else
-      "Uknown"
+      "<span class='label label-default'>Uknown</span>".html_safe
     end
   end
 
   def status2_meaning(status)
     if status == 0
-      "CANCELLED"
+      "<span class='label label-default'>CANCELLED</span>".html_safe
     elsif status == 1
-      "FOR DELIVERY"
+      "<span class='label label-warning'>FOR DELIVERY</span>".html_safe
     elsif status == 2
-      "IN TRANSIT"
+      "<span class='label label-success'>IN TRANSIT</span>".html_safe
     elsif status == 3
-      "RELEASED"
+      "<span class='label label-default'>RELEASED</span>".html_safe
     else
-      "UNKNOWN"
+      "<span class='label label-default'>Uknown</span>".html_safe
     end
   end
 

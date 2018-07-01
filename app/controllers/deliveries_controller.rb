@@ -1,4 +1,5 @@
 class DeliveriesController < ApplicationController
+  include DocumentsHelper
   include SmartListing::Helper::ControllerExtensions
   helper SmartListing::Helper
   before_action :set_filters, only: :master_index

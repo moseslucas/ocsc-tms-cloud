@@ -15,27 +15,12 @@
         %li
           %strong Date :
           = @doc.trans_date
-        / For Status1
-        - case @doc.status1
-        - when 1
-          %li.status1{:value => "#{@doc.status1}"} Consigned --- Partial Payments
-        - when 2
-          %li.status1{:value => "#{@doc.status1}"}
-            Fully Paid
-            %i.text-success.fa.fa-check-circle.fa-lg
-        - when 0
-          %li.status1{:value => "#{@doc.status1}"}
-            Cancelled
-            %i.text-danger.fa.fa-times-circle.fa-lg
-        - case @doc.status2
-        - when 1
-          %li.status2{:value => "#{@doc.status2}"} For Delivery
-        - when 2
-          %li.status2{:value => "#{@doc.status2}"} In Transit
-        - when 3
-          %li.status2{:value => "#{@doc.status2}"}
-            Released
-            %i.text-success.fa.fa-check-circle.fa-lg
+        %li.status1
+          %strong Payment Status:
+          = status1_meaning @doc.status1
+        %li.status2
+          %strong Delivery Status:
+          = status2_meaning @doc.status2
     .col-xs-4
       %h3 Locations:
       %ul.list-unstyled
@@ -50,7 +35,7 @@
       %h3 Remarks:
       %ul.list-unstyled
         %li
-          %strong Description :
+          %strong{class: @doc.description == "ARRIVED AT STATION" ? "text-success" : "text-warning"} Description :
           = @doc.description
   %hr/
   .row
