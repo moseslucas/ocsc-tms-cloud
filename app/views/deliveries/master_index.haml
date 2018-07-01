@@ -18,11 +18,11 @@
               .col-sm-3
                 .form-group
                   %label Source
-                  = select_tag(:source, options_for_select([["ALL", ""],["FOR DELIVERY", 1], ["IN TRANSIT", 2], ["RELEASED", 3]], @f_status2), {class: "form-control"})
+                  = select_tag :source, options_for_select(@select_source.map { |l| [l[:name], l[:id]]}, @f_source), include_blank: 'ALL', class: "form-control"
               .col-sm-3
                 .form-group
                   %label Destination
-                  = select_tag(:destination, options_for_select([["ALL", ""],["FOR DELIVERY", 1], ["IN TRANSIT", 2], ["RELEASED", 3]], @f_status2), {class: "form-control"})
+                  = select_tag :destination, options_for_select(@select_source.map { |l| [l[:name], l[:id]]}, @f_destination), include_blank: 'ALL', class: "form-control"
               .col-sm-2{ style: "padding-top: 20px" }
                 .btn-group
                   =  f.submit "FILTER", class: "btn green"

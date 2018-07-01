@@ -53,7 +53,7 @@ class CargosController < ApplicationController
     @f_status2 = params[:status2]
     @f_client_id = params[:client_id]
     @f_cwb = params[:cwb]
-    @f_daterange = params[:daterange]
+    @f_daterange = params[:daterange] || "#{Date.today.beginning_of_year.strftime("%m/%d/%Y")} - #{Date.today.strftime("%m/%d/%Y")}"
     @f_commit = params[:commit]
   end
 

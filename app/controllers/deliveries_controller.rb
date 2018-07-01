@@ -20,12 +20,21 @@ class DeliveriesController < ApplicationController
   end
 
   def master_index
-    deliveries_scope = Document.not_cancelled.includes(
+    deliveries_scope = Document.delivery.not_cancelled.includes(
       :source,
       :destination,
       :vehicles,
       :employees
-    ).delivery.not_cancelled
+    )
+
+    @select_source = deliveries_scope.distinct.pluck(:source_id).map do |loc|
+      {id: loc, name: Location.find(loc).name }
+    end
+
+    @select_destination = deliveries_scope.distinct.pluck(:destination_id).map do |loc|
+      {id: loc, name: Location.find(loc).name }
+    end
+
 
     # deliveries_scope = deliveries_scope.delivery_search(params[:filter]) if params[:filter]
 
@@ -35,6 +44,15 @@ class DeliveriesController < ApplicationController
         range_end = @f_daterange[13..22]
         deliveries_scope = deliveries_scope.where("documents.trans_date >= ? AND documents.trans_date <= ?", range_start, range_end)
       end
+
+      if @f_source && @f_source != ""
+        deliveries_scope = deliveries_scope.where(documents: {source_id: @f_source})
+      end
+
+      if @f_destination && @f_destination != ""
+        deliveries_scope = deliveries_scope.where(documents: {destination_id: @f_destination})
+      end
+
     elsif @f_commit && @f_commit == "RESET"
       redirect_to "/master_deliveries"
     end
@@ -53,7 +71,7 @@ class DeliveriesController < ApplicationController
 
   private
   def set_filters
-    @f_daterange = params[:daterange]
+    @f_daterange = params[:daterange] || "#{Date.today.beginning_of_year.strftime("%m/%d/%Y")} - #{Date.today.strftime("%m/%d/%Y")}"
     @f_commit = params[:commit]
     @f_source = params[:source]
     @f_destination = params[:destination]
