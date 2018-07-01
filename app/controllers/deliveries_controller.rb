@@ -69,6 +69,21 @@ class DeliveriesController < ApplicationController
     @doc = Document.find_by id: params[:id]
   end
 
+  def master_show
+    @doc = Document.find_by id: params[:id]
+    @items = @doc.document_details.map do |item|
+      {
+        ref_id: item.document_shipping.ref_id,
+        shipper: item.document_shipping.shipper,
+        consignee: item.document_shipping.client.name,
+        qty: item.document_shipping.document_details.sum(:qty),
+        description: item.document_shipping.document_details.first.description,
+        destination: item.document_shipping.destination.name,
+        amount: item.document_shipping.total_amount
+      }
+    end
+  end
+
   private
   def set_filters
     @f_daterange = params[:daterange] || "#{Date.today.beginning_of_year.strftime("%m/%d/%Y")} - #{Date.today.strftime("%m/%d/%Y")}"

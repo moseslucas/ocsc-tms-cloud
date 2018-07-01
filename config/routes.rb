@@ -37,5 +37,6 @@ Rails.application.routes.draw do
   get '/collection_by/:id', to: 'collection_by_clients#cargos'
 
   get '/master_deliveries', to: 'deliveries#master_index'
+  get '/master_delivery/:id', to: 'deliveries#master_show', as: :master_delivery
 
 end
