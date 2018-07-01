@@ -2,6 +2,7 @@ class DeliveriesController < ApplicationController
   include SmartListing::Helper::ControllerExtensions
   helper SmartListing::Helper
   before_action :set_filters, only: :master_index
+  before_action :set_delivery_description, only: :master_set_delivery_description
 
   def index 
     deliveries_scope = Document.from_exact_branch(session[:branch]).includes(
@@ -84,6 +85,20 @@ class DeliveriesController < ApplicationController
     end
   end
 
+  def master_set_delivery_description
+    if @params[:id]
+      doc = Document.find @params[:id]
+      doc.description = @params[:description]
+      if doc.save
+        render json: {status: 200}
+      else
+        render json: {status: 500}
+      end
+    else
+      redirect_to "/master_deliveries"
+    end
+  end
+
   private
   def set_filters
     @f_daterange = params[:daterange] || "#{Date.today.beginning_of_year.strftime("%m/%d/%Y")} - #{Date.today.strftime("%m/%d/%Y")}"
@@ -91,4 +106,9 @@ class DeliveriesController < ApplicationController
     @f_source = params[:source]
     @f_destination = params[:destination]
   end
+
+  def set_delivery_description
+    @params = params.permit(:id, :description)
+  end
+
 end

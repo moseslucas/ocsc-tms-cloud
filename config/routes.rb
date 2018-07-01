@@ -17,7 +17,11 @@ Rails.application.routes.draw do
   delete '/logout', to: 'sessions#destroy'
   post '/switch', to: 'sessions#switch'
 
-  resources :deliveries
+  resources :deliveries do
+    collection do
+      post :master_set_delivery_description
+    end
+  end
   resources :cargos
   resources :payments do
     collection do

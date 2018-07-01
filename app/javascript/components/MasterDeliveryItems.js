@@ -1,8 +1,12 @@
 import React from 'react'
+import axios from 'axios'
+import swal from 'sweetalert'
 
 class MasterDeliveryItems extends React.Component {
   constructor (props) {
     super(props)
+    this.lacking = this.lacking.bind(this)
+    this.complete = this.complete.bind(this)
     this.state = {
       checkedItems: 0
     }
@@ -14,6 +18,41 @@ class MasterDeliveryItems extends React.Component {
     } else {
       this.setState({ checkedItems: this.state.checkedItems - 1 })
     }
+  }
+
+  lacking () {
+    const data = {
+      id: this.props.doc.id,
+      description: `LACKING: ${this.refs.description.value}`
+    }
+    this.submit(data)
+  }
+
+  complete () {
+    const data = {
+      id: this.props.doc.id,
+      description: 'ARRIVED AT STATION'
+    }
+    this.submit(data)
+  }
+
+  submit (data) {
+    axios({
+      method: 'POST',
+      url: '/deliveries/master_set_delivery_description',
+      data
+    }).then( data => {
+      if (data.status === 200) {
+        if (data.description === 'ARRIVED AT STATION')
+          swal({ title: 'COMPLETE', text: `Delivery has set to ARRIVED AT STATION`, icon: 'success' })
+        else
+          swal({ title: 'LACKING', text: `Delivery has set to LACKING`, icon: 'success' })
+        setTimeout(location.reload.bind(location), 3000)
+      } else {
+        swal({ text: 'Something went wrong', icon: 'warning'})
+        $('#btn_confirm').prop('disabled', false)
+      }
+    })
   }
 
   tableHeader () {
@@ -73,26 +112,37 @@ class MasterDeliveryItems extends React.Component {
     const { items } = this.props
     const { checkedItems } = this.state
     const allChecked = items.length === checkedItems
-    return (
-      <React.Fragment>
-        <div className='row'>
-          <div className='col-sm-8 col-xs-12 form-group' style={{display: 'flex'}}>
-            <button className='btn green btn-lg' disabled={allChecked} style={{width: 180}}>
-              <i className='fa fa-circle-o-notch' />
-              LACKING
-             </button>
-            <input className='input-lg form-control' disabled={allChecked}/>
+    if (items.length > 0) {
+      return (
+        <React.Fragment>
+          <div className='row'>
+            <div className='col-sm-8 col-xs-12 form-group' style={{display: 'flex'}}>
+              <button
+                onClick={this.lacking}
+                className='btn green btn-lg'
+                disabled={allChecked}
+                style={{width: 180}}
+              >
+                <i className='fa fa-circle-o-notch' />
+                LACKING
+               </button>
+              <input ref='description' className='input-lg form-control' disabled={allChecked}/>
+            </div>
+            <div className='col-sm-1' />
+            <div className='col-sm-3 col-xs-12 form-group'>
+              <button
+                onClick={this.complete}
+                className='btn btn-lg btn-block green-jungle pull-right'
+                disabled={!allChecked}
+              >
+                <i className='fa fa-check' />
+                SET TO COMPLETE
+              </button>
+            </div>
           </div>
-          <div className='col-sm-1' />
-          <div className='col-sm-3 col-xs-12 form-group'>
-            <button className='btn btn-lg btn-block green-jungle pull-right' disabled={!allChecked}>
-              <i className='fa fa-check' />
-              SET TO COMPLETE
-            </button>
-          </div>
-        </div>
-      </React.Fragment>
-    )
+        </React.Fragment>
+      )
+    }
   }
 
   render () { 

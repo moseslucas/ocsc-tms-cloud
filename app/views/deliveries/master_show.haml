@@ -15,9 +15,6 @@
         %li
           %strong Date :
           = @doc.trans_date
-        %li
-          %strong Description :
-          = @doc.description
         / For Status1
         - case @doc.status1
         - when 1
@@ -40,18 +37,25 @@
             Released
             %i.text-success.fa.fa-check-circle.fa-lg
     .col-xs-4
-      %p
+      %h3 Locations:
+      %ul.list-unstyled
         %strong Source:
         %span.muted
           = @doc.source.name
-      %p
+      %ul.list-unstyled
         %strong Destination:
         %span.muted
           = @doc.destination.name
+    .col-xs-4
+      %h3 Remarks:
+      %ul.list-unstyled
+        %li
+          %strong Description :
+          = @doc.description
   %hr/
   .row
     .col-xs-12
-      = react_component "MasterDeliveryItems", { items: @items }
+      = react_component "MasterDeliveryItems", { items: @items , doc: @doc}
   -# .row
   -#   .col-xs-8.invoice-block
   -#     .btn-group
