@@ -9,7 +9,7 @@
     .col-xs-12
       .portlet.light.portlet-fit
         .portlet-title
-          = form_for :deliveries, url: { action: :master_index }, method: :get do |f|
+          = smart_listing_controls_for(:master_deliveries) do
             .row
               .col-sm-3
                 .form-group
@@ -25,11 +25,11 @@
               -#     = select_tag :destination, options_for_select(@select_source.map { |l| [l[:name], l[:id]]}, @f_destination), include_blank: 'ALL', class: "form-control"
               .col-sm-2{ style: "padding-top: 20px" }
                 .btn-group
-                  =  f.submit "FILTER", class: "btn green"
-                  =  f.submit "RESET", class: "btn"
+                  %button.btn#reset RESET
         .portlet-body
           = smart_listing_render :master_deliveries
 :javascript
   $(document).ready(function(){
     $('#daterange').daterangepicker()
+    $('#reset').click(_ => window.location.replace('/master_deliveries'))
   })

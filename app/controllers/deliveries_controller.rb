@@ -41,23 +41,18 @@ class DeliveriesController < ApplicationController
 
     # deliveries_scope = deliveries_scope.delivery_search(params[:filter]) if params[:filter]
 
-    if @f_commit && @f_commit == "FILTER"
-      if @f_daterange && @f_daterange != ""
-        range_start = @f_daterange[0..9]
-        range_end = @f_daterange[13..22]
-        deliveries_scope = deliveries_scope.where("documents.trans_date >= ? AND documents.trans_date <= ?", range_start, range_end)
-      end
+    if @f_daterange && @f_daterange != ""
+      range_start = @f_daterange[0..9]
+      range_end = @f_daterange[13..22]
+      deliveries_scope = deliveries_scope.where("documents.trans_date >= ? AND documents.trans_date <= ?", range_start, range_end)
+    end
 
-      if @f_source && @f_source != ""
-        deliveries_scope = deliveries_scope.where(documents: {source_id: @f_source})
-      end
+    if @f_source && @f_source != ""
+      deliveries_scope = deliveries_scope.where(documents: {source_id: @f_source})
+    end
 
-      if @f_destination && @f_destination != ""
-        deliveries_scope = deliveries_scope.where(documents: {destination_id: @f_destination})
-      end
-
-    elsif @f_commit && @f_commit == "RESET"
-      redirect_to "/master_deliveries"
+    if @f_destination && @f_destination != ""
+      deliveries_scope = deliveries_scope.where(documents: {destination_id: @f_destination})
     end
 
     @master_deliveries = smart_listing_create(
