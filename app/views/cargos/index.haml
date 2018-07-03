@@ -11,7 +11,7 @@
         -# .portlet-title
           = #link_to "CREATE NEW", new_document_path, class: "btn green"
         .portlet-title
-          = form_for :cargos, url: { action: :index }, method: :get do |f|
+          = smart_listing_controls_for(:cargos) do
             .row
               .col-sm-3
                 .form-group
@@ -31,8 +31,7 @@
                   = select_tag(:status2, options_for_select([["ALL", ""],["FOR DELIVERY", 1], ["IN TRANSIT", 2], ["RELEASED", 3]], @f_status2), {class: "form-control"})
               .col-sm-2{ style: "padding-top: 20px" }
                 .btn-group
-                  =  f.submit "FILTER", class: "btn green"
-                  =  f.submit "RESET", class: "btn"
+                  %button.btn#reset RESET
         .portlet-body
           = smart_listing_render :cargos
 
@@ -40,4 +39,5 @@
   $(document).ready(function(){
     $('#client_id').select2({ theme: 'bootstrap' })
     $('#daterange').daterangepicker()
+    $('#reset').click(_ => window.location.replace('/cargos'))
   })
