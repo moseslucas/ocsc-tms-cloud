@@ -30,16 +30,9 @@ class DeliveriesController < ApplicationController
       :employees
     )
 
-    @select_source = deliveries_scope.distinct.pluck(:source_id).map do |loc|
-      {id: loc, name: Location.find(loc).name }
+    @select_location = Location.distinct.pluck(:name).map do |loc|
+      { name: loc }
     end
-
-    @select_destination = deliveries_scope.distinct.pluck(:destination_id).map do |loc|
-      {id: loc, name: Location.find(loc).name }
-    end
-
-
-    # deliveries_scope = deliveries_scope.delivery_search(params[:filter]) if params[:filter]
 
     if @f_daterange && @f_daterange != ""
       range_start = @f_daterange[0..9]
@@ -48,11 +41,13 @@ class DeliveriesController < ApplicationController
     end
 
     if @f_source && @f_source != ""
-      deliveries_scope = deliveries_scope.where(documents: {source_id: @f_source})
+      ids = Location.where("name LIKE ?",@f_source).pluck(:id)
+      deliveries_scope = deliveries_scope.where(documents: {source_id: ids})
     end
 
     if @f_destination && @f_destination != ""
-      deliveries_scope = deliveries_scope.where(documents: {destination_id: @f_destination})
+      ids = Location.where("name LIKE ?",@f_destination).pluck(:id)
+      deliveries_scope = deliveries_scope.where(documents: {destination_id: ids})
     end
 
     @master_deliveries = smart_listing_create(
