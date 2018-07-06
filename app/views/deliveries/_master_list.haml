@@ -22,6 +22,7 @@
           %td= t.source.name
           %td= t.destination.name
           %td
+            %text{class: t.description == "ARRIVED AT STATION" ? "text-success" : "text-warning"}= t.description
           %td
             = button_to "View", master_delivery_path(t), method: "get", class: "btn dark btn-outline"
   = smart_listing.paginate
