@@ -41,13 +41,13 @@ class MasterDeliveryItems extends React.Component {
       method: 'POST',
       url: '/deliveries/master_set_delivery_description',
       data
-    }).then( data => {
-      if (data.status === 200) {
+    }).then( res => {
+      if (res.status === 200) {
         if (data.description === 'ARRIVED AT STATION')
           swal({ title: 'COMPLETE', text: `Delivery has set to ARRIVED AT STATION`, icon: 'success' })
         else
           swal({ title: 'LACKING', text: `Delivery has set to LACKING`, icon: 'success' })
-        setTimeout(location.reload.bind(location), 3000)
+        setTimeout(location.reload.bind(location), 1000)
       } else {
         swal({ text: 'Something went wrong', icon: 'warning'})
         $('#btn_confirm').prop('disabled', false)
