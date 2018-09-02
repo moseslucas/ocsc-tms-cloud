@@ -7,12 +7,12 @@
   %table.soa-headertable
     %tr
       %td
+        %h4.text-left
+          S.O.A.
+          %text.soa_id
       %td
         %h4.text-center STATEMENT OF ACCOUNT
       %td
-        %h4.text-right
-          S.O.A.
-          %text.soa_id
   %table.soa-datatable
     %tr
       %td Customer's Name
@@ -27,20 +27,20 @@
           %text#date_printed= DateTime.now.strftime '%B %d, %Y'
     / Detail Columns
     %tr
-      %td.soa-col1-width.text-center
+      %td.soa-col1-width.text-left
         %strong Trans. Date
-      %td.soa-col2-width.text-center
+      %td.soa-col2-width.text-left
         %strong CWB No.
       %td.soa-col3-width.text-center.long-column
         %strong Shipper's Name
-      %td.soa-col4-width.text-center
+      %td.soa-col4-width.text-left
         %strong Amount
     / Detail VALUES
     - total_cargo_this_month = 0
     - @cargo_this_month.each do |c|
       %tr
-        %td.text-center= c[:trans_date].strftime '%B %d, %Y'
-        %td.text-center
+        %td.text-left= c[:trans_date].strftime '%B %d, %Y'
+        %td.text-left
           = "#{c[:branch][0][0..2].upcase}-#{c[:ref_id]}"
         %td.text-center.long-column
           = c[:shipper]
